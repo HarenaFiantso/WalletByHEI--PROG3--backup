@@ -2,6 +2,8 @@ package com.wallet.service;
 
 import com.wallet.model.Account;
 import com.wallet.model.Transaction;
+import com.wallet.model.type.TransactionType;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -32,9 +34,9 @@ public class TransactionService {
     Double updatedBalance = 0.0;
 
     for (Transaction transaction : transactions) {
-      if (Objects.equals(transaction.getTransactionType(), "DEBIT")) {
+      if (transaction.getTransactionType() == TransactionType.DEBIT) {
         updatedBalance -= transaction.getAmount();
-      } else if (Objects.equals(transaction.getTransactionType(), "CREDIT")) {
+      } else if (transaction.getTransactionType() == TransactionType.CREDIT) {
         updatedBalance += transaction.getAmount();
       }
     }
