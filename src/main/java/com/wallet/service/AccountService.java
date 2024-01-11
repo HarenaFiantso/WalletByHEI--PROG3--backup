@@ -3,6 +3,7 @@ package com.wallet.service;
 import com.wallet.model.Account;
 import com.wallet.model.CurrencyValue;
 import com.wallet.model.Transaction;
+import com.wallet.model.type.TransactionType;
 import com.wallet.repository.implementations.CurrencyValueCrudOperations;
 import com.wallet.repository.implementations.TransactionCrudOperations;
 import java.time.Instant;
@@ -28,9 +29,9 @@ public class AccountService {
       if (transactionInstant.isBefore(dateTime.atZone(ZoneId.systemDefault()).toInstant())
           || transactionInstant.equals(dateTime.atZone(ZoneId.systemDefault()).toInstant())) {
 
-        if (Objects.equals(transaction.getTransactionType(), "CREDIT")) {
+        if (transaction.getTransactionType() == TransactionType.CREDIT) {
           balance += transaction.getAmount();
-        } else if (Objects.equals(transaction.getTransactionType(), "DEBIT")) {
+        } else if (transaction.getTransactionType() == TransactionType.DEBIT) {
           balance -= transaction.getAmount();
         }
       }
