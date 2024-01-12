@@ -107,51 +107,41 @@ public class TransactionCrudOperations implements CrudOperations<Transaction> {
   }
 
   @Override
+  public List<Transaction> updateAll(List<Transaction> toUpdate) {
+    List<Transaction> updatedTransactions = new ArrayList<>();
+
+    for (Transaction transaction : toUpdate) {
+      Transaction updatedTransaction = this.save(transaction);
+      updatedTransactions.add(updatedTransaction);
+    }
+
+    return updatedTransactions;
+  }
+
+  @Override
   public Transaction save(Transaction toSave) {
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
-    String QUERY;
-    boolean isNewTransaction = toSave.getTransactionId() == null;
-
     try {
       connection = ConnectionToDb.getConnection();
-      if (isNewTransaction) {
-        QUERY = INSERT_QUERY;
-        statement = connection.prepareStatement(QUERY, Statement.RETURN_GENERATED_KEYS);
-        statement.setTimestamp(1, toSave.getTransactionDate());
-        statement.setString(2, String.valueOf(toSave.getTransactionType()));
-        statement.setDouble(3, toSave.getAmount());
-        statement.setString(4, toSave.getLabel());
-        statement.setInt(5, toSave.getAccountId());
-        statement.setInt(6, toSave.getCategoryId());
-      } else {
-        QUERY = UPDATE_QUERY;
-        statement = connection.prepareStatement(QUERY);
-        statement.setTimestamp(1, toSave.getTransactionDate());
-        statement.setString(2, String.valueOf(toSave.getTransactionType()));
-        statement.setDouble(3, toSave.getAmount());
-        statement.setString(5, toSave.getLabel());
-        statement.setInt(4, toSave.getAccountId());
-        statement.setInt(6, toSave.getCategoryId());
-        statement.setLong(7, toSave.getTransactionId());
-      }
+      statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-      boolean isResultSet = statement.execute();
+      statement.setTimestamp(1, toSave.getTransactionDate());
+      statement.setString(2, String.valueOf(toSave.getTransactionType()));
+      statement.setDouble(3, toSave.getAmount());
+      statement.setString(4, toSave.getLabel());
+      statement.setInt(5, toSave.getAccountId());
+      statement.setInt(6, toSave.getCategoryId());
 
-      if (isResultSet) {
-        resultSet = statement.getResultSet();
+      int rowsAffected = statement.executeUpdate();
 
+      if (rowsAffected > 0) {
+        resultSet = statement.getGeneratedKeys();
         if (resultSet.next()) {
-          Transaction savedTransaction = new Transaction();
-          savedTransaction.setTransactionDate(resultSet.getTimestamp(TRANSACTION_DATE_COLUMN));
-          savedTransaction.setTransactionType(TransactionType.valueOf(resultSet.getString(TRANSACTION_TYPE_COLUMN)));
-          savedTransaction.setAmount(resultSet.getDouble(AMOUNT_COLUMN));
-          savedTransaction.setLabel(resultSet.getString(LABEL_COLUMN));
-          savedTransaction.setAccountId(resultSet.getInt(ACCOUNT_ID_COLUMN));
-
-          return savedTransaction;
+          toSave.setTransactionId(resultSet.getLong(1));
+          return toSave;
         }
       }
     } catch (SQLException e) {
@@ -159,6 +149,38 @@ public class TransactionCrudOperations implements CrudOperations<Transaction> {
     } finally {
       closeResources(connection, statement, resultSet);
     }
+
+    return null;
+  }
+
+  @Override
+  public Transaction update(Transaction toUpdate) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    try {
+      connection = ConnectionToDb.getConnection();
+      statement = connection.prepareStatement(UPDATE_QUERY);
+
+      statement.setTimestamp(1, toUpdate.getTransactionDate());
+      statement.setString(2, String.valueOf(toUpdate.getTransactionType()));
+      statement.setDouble(3, toUpdate.getAmount());
+      statement.setString(4, toUpdate.getLabel());
+      statement.setInt(5, toUpdate.getAccountId());
+      statement.setInt(6, toUpdate.getCategoryId());
+      statement.setLong(7, toUpdate.getTransactionId());
+
+      int rowsAffected = statement.executeUpdate();
+
+      if (rowsAffected > 0) {
+        return toUpdate;
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(STR."Failed to update transaction : \{e.getMessage()}");
+    } finally {
+      closeResources(connection, statement, null);
+    }
+
     return null;
   }
 

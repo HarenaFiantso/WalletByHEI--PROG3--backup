@@ -95,44 +95,38 @@ public class TransferHistoryCrudOperations implements CrudOperations<TransferHis
   }
 
   @Override
+  public List<TransferHistory> updateAll(List<TransferHistory> toUpdate) {
+    List<TransferHistory> updatedTransferHistories = new ArrayList<>();
+
+    for (TransferHistory transferHistory : toUpdate) {
+      TransferHistory updatedTransferHistory = this.save(transferHistory);
+      updatedTransferHistories.add(updatedTransferHistory);
+    }
+
+    return updatedTransferHistories;
+  }
+
+  @Override
   public TransferHistory save(TransferHistory toSave) {
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
-    String QUERY;
-    boolean isNewTransferHistory = toSave.getTransferHistoryId() == null;
-
     try {
       connection = ConnectionToDb.getConnection();
-      if (isNewTransferHistory) {
-        QUERY = INSERT_QUERY;
-        statement = connection.prepareStatement(QUERY, Statement.RETURN_GENERATED_KEYS);
-        statement.setTimestamp(1, toSave.getTransferDate());
-        statement.setInt(2, toSave.getDebitTransactionId());
-        statement.setInt(3, toSave.getCreditTransactionId());
-      } else {
-        QUERY = UPDATE_QUERY;
-        statement = connection.prepareStatement(QUERY);
-        statement.setTimestamp(1, toSave.getTransferDate());
-        statement.setInt(2, toSave.getDebitTransactionId());
-        statement.setInt(3, toSave.getCreditTransactionId());
-        statement.setLong(4, toSave.getTransferHistoryId());
-      }
+      statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-      boolean isResultSet = statement.execute();
+      statement.setTimestamp(1, toSave.getTransferDate());
+      statement.setInt(2, toSave.getDebitTransactionId());
+      statement.setInt(3, toSave.getCreditTransactionId());
 
-      if (isResultSet) {
-        resultSet = statement.getResultSet();
+      int rowsAffected = statement.executeUpdate();
 
+      if (rowsAffected > 0) {
+        resultSet = statement.getGeneratedKeys();
         if (resultSet.next()) {
-          TransferHistory savedTransferHistory = new TransferHistory();
-          savedTransferHistory.setTransferDate(resultSet.getTimestamp(TRANSFER_DATE_COLUMN));
-          savedTransferHistory.setDebitTransactionId(resultSet.getInt(DEBIT_TRANSACTION_ID_COLUMN));
-          savedTransferHistory.setCreditTransactionId(
-              resultSet.getInt(CREDIT_TRANSACTION_ID_COLUMN));
-
-          return savedTransferHistory;
+          toSave.setTransferHistoryId(resultSet.getLong(1));
+          return toSave;
         }
       }
     } catch (SQLException e) {
@@ -140,6 +134,35 @@ public class TransferHistoryCrudOperations implements CrudOperations<TransferHis
     } finally {
       closeResources(connection, statement, resultSet);
     }
+
+    return null;
+  }
+
+  @Override
+  public TransferHistory update(TransferHistory toUpdate) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    try {
+      connection = ConnectionToDb.getConnection();
+      statement = connection.prepareStatement(UPDATE_QUERY);
+
+      statement.setTimestamp(1, toUpdate.getTransferDate());
+      statement.setInt(2, toUpdate.getDebitTransactionId());
+      statement.setInt(3, toUpdate.getCreditTransactionId());
+      statement.setLong(4, toUpdate.getTransferHistoryId());
+
+      int rowsAffected = statement.executeUpdate();
+
+      if (rowsAffected > 0) {
+        return toUpdate;
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(STR."Failed to update transfer history : \{e.getMessage()}");
+    } finally {
+      closeResources(connection, statement, null);
+    }
+
     return null;
   }
 

@@ -34,7 +34,17 @@ public class CurrencyValueCrudOperations implements CrudOperations<CurrencyValue
   }
 
   @Override
+  public List<CurrencyValue> updateAll(List<CurrencyValue> toUpdate) {
+    return null;
+  }
+
+  @Override
   public CurrencyValue save(CurrencyValue toSave) {
+    return null;
+  }
+
+  @Override
+  public CurrencyValue update(CurrencyValue toUpdate) {
     return null;
   }
 

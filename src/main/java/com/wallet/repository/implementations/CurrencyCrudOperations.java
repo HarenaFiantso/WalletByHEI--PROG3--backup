@@ -95,49 +95,72 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
   }
 
   @Override
+  public List<Currency> updateAll(List<Currency> toUpdate) {
+    List<Currency> updateCurrencies = new ArrayList<>();
+
+    for (Currency currency : toUpdate) {
+      Currency updateCurrency = this.save(currency);
+      updateCurrencies.add(updateCurrency);
+    }
+
+    return updateCurrencies;
+  }
+
+  @Override
   public Currency save(Currency toSave) {
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
-    String QUERY;
-    boolean isNewCurrency = toSave.getCurrencyId() == null;
-
     try {
       connection = ConnectionToDb.getConnection();
-      if (isNewCurrency) {
-        QUERY = INSERT_QUERY;
-        statement = connection.prepareStatement(QUERY, Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, String.valueOf(toSave.getCurrencyName()));
-        statement.setString(2, String.valueOf(toSave.getCurrencyCode()));
-      } else {
-        QUERY = UPDATE_QUERY;
-        statement = connection.prepareStatement(QUERY);
-        statement.setString(1, String.valueOf(toSave.getCurrencyName()));
-        statement.setString(2, String.valueOf(toSave.getCurrencyCode()));
-        statement.setLong(4, toSave.getCurrencyId());
-      }
+      statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-      boolean isResultSet = statement.execute();
+      statement.setString(1, String.valueOf(toSave.getCurrencyName()));
+      statement.setString(2, String.valueOf(toSave.getCurrencyCode()));
 
-      if (isResultSet) {
-        resultSet = statement.getResultSet();
+      int rowsAffected = statement.executeUpdate();
 
+      if (rowsAffected > 0) {
+        resultSet = statement.getGeneratedKeys();
         if (resultSet.next()) {
-          Currency savedCurrency = new Currency();
-          savedCurrency.setCurrencyName(
-              CurrencyNameType.valueOf(resultSet.getString(CURRENCY_NAME_COLUMN)));
-          savedCurrency.setCurrencyCode(
-              CurrencyCodeType.valueOf(resultSet.getString(CURRENCY_CODE_COLUMN)));
-
-          return savedCurrency;
+          toSave.setCurrencyId(resultSet.getLong(1));
+          return toSave;
         }
       }
     } catch (SQLException e) {
-      throw new RuntimeException(STR."Failed to save currency : \{e.getMessage()}");
+      throw new RuntimeException(STR."Failed to save account : \{e.getMessage()}");
     } finally {
       closeResources(connection, statement, resultSet);
     }
+
+    return null;
+  }
+
+  @Override
+  public Currency update(Currency toUpdate) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    try {
+      connection = ConnectionToDb.getConnection();
+      statement = connection.prepareStatement(UPDATE_QUERY);
+
+      statement.setString(1, String.valueOf(toUpdate.getCurrencyName()));
+      statement.setString(2, String.valueOf(toUpdate.getCurrencyCode()));
+      statement.setLong(3, toUpdate.getCurrencyId());
+
+      int rowsAffected = statement.executeUpdate();
+
+      if (rowsAffected > 0) {
+        return toUpdate;
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(STR."Failed to update currency : \{e.getMessage()}");
+    } finally {
+      closeResources(connection, statement, null);
+    }
+
     return null;
   }
 
