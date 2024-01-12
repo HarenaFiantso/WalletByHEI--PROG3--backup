@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SqlOperation {
-  String type();
+  Type type();
 
   enum Type {
     SELECT, INSERT, UPDATE, DELETE
