@@ -2,7 +2,6 @@ package com.wallet.repository.implementations;
 
 import com.wallet.database.ConnectionToDb;
 import com.wallet.model.Account;
-import com.wallet.model.Currency;
 import com.wallet.model.type.AccountType;
 import com.wallet.repository.CrudOperations;
 import java.sql.*;
@@ -95,53 +94,74 @@ public class AccountCrudOperations implements CrudOperations<Account> {
   }
 
   @Override
+  public List<Account> updateAll(List<Account> toUpdate) {
+    List<Account> updatedAccounts = new ArrayList<>();
+
+    for (Account account : toUpdate) {
+      Account updatedAccount = this.update(account);
+      updatedAccounts.add(updatedAccount);
+    }
+
+    return updatedAccounts;
+  }
+
+  @Override
   public Account save(Account toSave) {
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
 
-    String QUERY;
-    boolean isNewAccount = toSave.getAccountId() == null;
-
     try {
       connection = ConnectionToDb.getConnection();
-      Currency currency = new Currency();
-      int currencyId = currency.getCurrencyId().intValue();
+      statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
 
-      if (isNewAccount) {
-        QUERY = INSERT_QUERY;
-        statement = connection.prepareStatement(QUERY, Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, toSave.getAccountName());
-        statement.setString(2, String.valueOf(toSave.getAccountType()));
-        statement.setInt(3, currencyId);
-      } else {
-        QUERY = UPDATE_QUERY;
-        statement = connection.prepareStatement(QUERY);
-        statement.setString(1, toSave.getAccountName());
-        statement.setString(2, String.valueOf(toSave.getAccountType()));
-        statement.setInt(3, currencyId);
-        statement.setLong(4, toSave.getAccountId());
-      }
+      statement.setString(1, toSave.getAccountName());
+      statement.setString(2, String.valueOf(toSave.getAccountType()));
+      statement.setInt(3, toSave.getCurrencyId());
 
-      boolean isResultSet = statement.execute();
+      int rowsAffected = statement.executeUpdate();
 
-      if (isResultSet) {
-        resultSet = statement.getResultSet();
-
+      if (rowsAffected > 0) {
+        resultSet = statement.getGeneratedKeys();
         if (resultSet.next()) {
-          Account savedAccount = new Account();
-          savedAccount.setAccountName(resultSet.getString(ACCOUNT_NAME_COLUMN));
-          savedAccount.setAccountType(AccountType.valueOf(resultSet.getString(ACCOUNT_TYPE_COLUMN)));
-          savedAccount.setCurrencyId(resultSet.getInt(CURRENCY_ID_COLUMN));
-
-          return savedAccount;
+          toSave.setAccountId(resultSet.getLong(1));
+          return toSave;
         }
       }
     } catch (SQLException e) {
-      throw new RuntimeException(STR."Failed to save account: \{e.getMessage()}");
+      throw new RuntimeException(STR."Failed to save account : \{e.getMessage()}");
     } finally {
       closeResources(connection, statement, resultSet);
     }
+
+    return null;
+  }
+
+  @Override
+  public Account update(Account toUpdate) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    try {
+      connection = ConnectionToDb.getConnection();
+      statement = connection.prepareStatement(UPDATE_QUERY);
+
+      statement.setString(1, toUpdate.getAccountName());
+      statement.setString(2, String.valueOf(toUpdate.getAccountType()));
+      statement.setInt(3, toUpdate.getCurrencyId());
+      statement.setLong(4, toUpdate.getAccountId());
+
+      int rowsAffected = statement.executeUpdate();
+
+      if (rowsAffected > 0) {
+        return toUpdate;
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(STR."Failed to update account : \{e.getMessage()}");
+    } finally {
+      closeResources(connection, statement, null);
+    }
+
     return null;
   }
 
