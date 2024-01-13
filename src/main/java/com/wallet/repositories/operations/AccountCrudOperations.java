@@ -1,6 +1,6 @@
-package com.wallet.repositories.implementations;
+package com.wallet.repositories.operations;
 
-import com.wallet.database.ConnectionToDb;
+import com.wallet.config.ConnectionToDb;
 import com.wallet.entities.Account;
 import com.wallet.types.AccountType;
 import com.wallet.repositories.CrudOperations;

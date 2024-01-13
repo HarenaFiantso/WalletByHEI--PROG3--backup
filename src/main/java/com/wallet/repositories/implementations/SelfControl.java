@@ -1,4 +1,4 @@
-package com.wallet.repositories.utils;
+package com.wallet.repositories.implementations;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
