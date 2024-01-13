@@ -1,9 +1,9 @@
 package com.wallet.service;
 
-import com.wallet.model.Account;
-import com.wallet.model.CurrencyValue;
-import com.wallet.model.Transaction;
-import com.wallet.model.type.TransactionType;
+import com.wallet.entities.Account;
+import com.wallet.entities.CurrencyValue;
+import com.wallet.entities.Transaction;
+import com.wallet.types.TransactionType;
 import com.wallet.repository.implementations.CurrencyValueCrudOperations;
 import com.wallet.repository.implementations.TransactionCrudOperations;
 import java.time.Instant;
@@ -12,7 +12,6 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class AccountService {
 

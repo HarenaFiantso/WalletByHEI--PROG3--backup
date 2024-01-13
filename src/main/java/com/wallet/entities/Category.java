@@ -1,9 +1,9 @@
-package com.wallet.model;
+package com.wallet.entities;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
-import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.type.GenerativeValue;
+import com.wallet.annotations.FieldType;
+import com.wallet.types.GenerativeValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +23,6 @@ public class Category {
   @DatabaseField(name = "category_id", identity = true, generative = GenerativeValue.SEQUENCE)
   private Long categoryId;
 
-  @DatabaseField(name = "category_name", columnType = ColumnType.VARCHAR, required = true)
+  @DatabaseField(name = "category_name", fieldType = FieldType.VARCHAR, required = true)
   private String categoryName;
 }

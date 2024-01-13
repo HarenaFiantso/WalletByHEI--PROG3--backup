@@ -1,12 +1,12 @@
-package com.wallet.model;
+package com.wallet.entities;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
 
 import java.time.LocalDateTime;
 
-import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.type.GenerativeValue;
+import com.wallet.annotations.FieldType;
+import com.wallet.types.GenerativeValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,15 +27,15 @@ public class CurrencyValue {
   @DatabaseField(name = "currency_value_id", identity = true, generative = GenerativeValue.SEQUENCE)
   private Long currencyValueId;
 
-  @DatabaseField(name = "currency_value_date", columnType = ColumnType.DATE, required = true)
+  @DatabaseField(name = "currency_value_date", fieldType = FieldType.DATE, required = true)
   private LocalDateTime currencyValueDate;
 
-  @DatabaseField(name = "exchange_rate", columnType = ColumnType.DOUBLE, required = true)
+  @DatabaseField(name = "exchange_rate", fieldType = FieldType.DOUBLE, required = true)
   private Double exchangeRate;
 
-  @DatabaseField(name = "destination_currency_id", columnType = ColumnType.INT, references = true, required = true)
+  @DatabaseField(name = "destination_currency_id", fieldType = FieldType.INT, references = true, required = true)
   private int destinationCurrencyId;
 
-  @DatabaseField(name = "source_currency_id", columnType = ColumnType.INT, references = true, required = true)
+  @DatabaseField(name = "source_currency_id", fieldType = FieldType.INT, references = true, required = true)
   private int sourceCurrencyId;
 }

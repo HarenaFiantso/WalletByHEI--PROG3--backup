@@ -1,7 +1,7 @@
 package com.wallet.repository.implementations;
 
 import com.wallet.database.ConnectionToDb;
-import com.wallet.model.TransferHistory;
+import com.wallet.entities.TransferHistory;
 import com.wallet.repository.CrudOperations;
 import java.sql.*;
 import java.util.ArrayList;

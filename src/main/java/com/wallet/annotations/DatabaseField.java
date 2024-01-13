@@ -1,7 +1,6 @@
 package com.wallet.annotations;
 
-import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.type.GenerativeValue;
+import com.wallet.types.GenerativeValue;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,19 +11,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface DatabaseField {
   String name() default "";
-  String defaultValue() default "";
-  String columnType() default ColumnType.NONE;
-
+  String fieldType() default FieldType.NONE;
 
   int size() default 0;
-  int precision() default 0;
-  int scale() default 0;
-
 
   boolean required() default false;
   boolean identity() default false;
   boolean references() default false;
-  boolean unique() default false;
 
   GenerativeValue generative() default GenerativeValue.NONE;
 }

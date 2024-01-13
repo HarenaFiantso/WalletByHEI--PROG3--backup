@@ -1,7 +1,7 @@
 package com.wallet.service;
 
-import com.wallet.model.*;
-import com.wallet.model.type.TransactionType;
+import com.wallet.entities.*;
+import com.wallet.types.TransactionType;
 import com.wallet.repository.implementations.CurrencyCrudOperations;
 import com.wallet.repository.implementations.CurrencyValueCrudOperations;
 import com.wallet.repository.implementations.TransactionCrudOperations;

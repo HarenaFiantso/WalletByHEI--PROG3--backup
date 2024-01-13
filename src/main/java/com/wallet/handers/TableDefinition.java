@@ -2,7 +2,7 @@ package com.wallet.handers;
 
 import lombok.*;
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.type.ColumnType;
+import com.wallet.annotations.FieldType;
 import com.wallet.annotations.DatabaseTable;
 
 import java.lang.reflect.Field;
@@ -113,8 +113,8 @@ public class TableDefinition<T> {
   private String parsePsqlType(Field field, DatabaseField column){
     String type;
 
-    String definedOnAnnotation = column.columnType();
-    if(!definedOnAnnotation.equals(ColumnType.NONE)){
+    String definedOnAnnotation = column.fieldType();
+    if(!definedOnAnnotation.equals(FieldType.NONE)){
       type = definedOnAnnotation;
     }else {
       String javaReturnType = field.getType().getSimpleName();

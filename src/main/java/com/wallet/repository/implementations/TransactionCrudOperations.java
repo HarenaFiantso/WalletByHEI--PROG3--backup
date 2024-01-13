@@ -1,9 +1,9 @@
 package com.wallet.repository.implementations;
 
 import com.wallet.database.ConnectionToDb;
-import com.wallet.model.Account;
-import com.wallet.model.Transaction;
-import com.wallet.model.type.TransactionType;
+import com.wallet.entities.Account;
+import com.wallet.entities.Transaction;
+import com.wallet.types.TransactionType;
 import com.wallet.repository.CrudOperations;
 
 import java.sql.*;

@@ -1,11 +1,11 @@
-package com.wallet.model;
+package com.wallet.entities;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
-import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.type.GenerativeValue;
-import com.wallet.model.type.CurrencyCodeType;
-import com.wallet.model.type.CurrencyNameType;
+import com.wallet.annotations.FieldType;
+import com.wallet.types.GenerativeValue;
+import com.wallet.types.CurrencyCodeType;
+import com.wallet.types.CurrencyNameType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,9 +26,9 @@ public class Currency {
   @DatabaseField(name = "currency_id", identity = true, generative = GenerativeValue.SEQUENCE)
   private Long currencyId;
 
-  @DatabaseField(name = "currency_name", columnType = ColumnType.TEXT, required = true)
+  @DatabaseField(name = "currency_name", fieldType = FieldType.TEXT, required = true)
   private CurrencyNameType currencyName;
 
-  @DatabaseField(name = "currency_code", columnType = ColumnType.TEXT, required = true)
+  @DatabaseField(name = "currency_code", fieldType = FieldType.TEXT, required = true)
   private CurrencyCodeType currencyCode;
 }

@@ -1,4 +1,4 @@
-package com.wallet.annotations.type;
+package com.wallet.types;
 
 public enum GenerativeValue {
   SEQUENCE,

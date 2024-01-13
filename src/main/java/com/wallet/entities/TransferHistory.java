@@ -1,12 +1,12 @@
-package com.wallet.model;
+package com.wallet.entities;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
 
 import java.sql.Timestamp;
 
-import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.type.GenerativeValue;
+import com.wallet.annotations.FieldType;
+import com.wallet.types.GenerativeValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,13 +27,13 @@ public class TransferHistory {
   @DatabaseField(name = "transfer_history_id", identity = true, generative = GenerativeValue.SEQUENCE)
   private Long transferHistoryId;
 
-  @DatabaseField(name = "transfer_date", columnType = ColumnType.TIMESTAMP, required = true)
+  @DatabaseField(name = "transfer_date", fieldType = FieldType.TIMESTAMP, required = true)
   private Timestamp transferDate;
 
-  @DatabaseField(name = "debit_transaction_id", columnType = ColumnType.INT, references = true, required = true)
+  @DatabaseField(name = "debit_transaction_id", fieldType = FieldType.INT, references = true, required = true)
   private int debitTransactionId;
 
-  @DatabaseField(name = "credit_transaction_id", columnType = ColumnType.INT, references = true, required = true)
+  @DatabaseField(name = "credit_transaction_id", fieldType = FieldType.INT, references = true, required = true)
   private int creditTransactionId;
 
   private Double amount;

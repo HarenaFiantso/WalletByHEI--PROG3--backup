@@ -1,10 +1,10 @@
-package com.wallet.model;
+package com.wallet.entities;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
-import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.type.GenerativeValue;
-import com.wallet.model.type.TransactionType;
+import com.wallet.annotations.FieldType;
+import com.wallet.types.GenerativeValue;
+import com.wallet.types.TransactionType;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,21 +26,21 @@ public class Transaction {
   @DatabaseField(name = "transaction_id", identity = true, generative = GenerativeValue.SEQUENCE)
   private Long transactionId;
 
-  @DatabaseField(name = "amount", columnType = ColumnType.DOUBLE, required = true)
+  @DatabaseField(name = "amount", fieldType = FieldType.DOUBLE, required = true)
   private Double amount;
 
-  @DatabaseField(name = "label", columnType = ColumnType.VARCHAR, required = true)
+  @DatabaseField(name = "label", fieldType = FieldType.VARCHAR, required = true)
   private String label;
 
-  @DatabaseField(name = "transaction_date", columnType = ColumnType.TIMESTAMP)
+  @DatabaseField(name = "transaction_date", fieldType = FieldType.TIMESTAMP)
   private Timestamp transactionDate;
 
-  @DatabaseField(name = "transaction_type", columnType = ColumnType.TEXT, required = true)
+  @DatabaseField(name = "transaction_type", fieldType = FieldType.TEXT, required = true)
   private TransactionType transactionType;
 
-  @DatabaseField(name = "account_id", columnType = ColumnType.INT, references = true, required = true)
+  @DatabaseField(name = "account_id", fieldType = FieldType.INT, references = true, required = true)
   private int accountId;
 
-  @DatabaseField(name = "category_id", columnType = ColumnType.INT, references = true, required = true)
+  @DatabaseField(name = "category_id", fieldType = FieldType.INT, references = true, required = true)
   private int categoryId;
 }
