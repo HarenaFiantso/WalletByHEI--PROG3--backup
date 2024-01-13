@@ -1,9 +1,9 @@
 package com.wallet.handers;
 
 import lombok.*;
-import com.wallet.annotation.DatabaseField;
-import com.wallet.annotation.ColumnType;
-import com.wallet.annotation.Table;
+import com.wallet.annotations.DatabaseField;
+import com.wallet.annotations.ColumnType;
+import com.wallet.annotations.Table;
 
 import java.lang.reflect.Field;
 import java.util.*;

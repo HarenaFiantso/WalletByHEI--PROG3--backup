@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import com.wallet.annotation.DatabaseField;
+import com.wallet.annotations.DatabaseField;
 
 @Getter
 @Setter

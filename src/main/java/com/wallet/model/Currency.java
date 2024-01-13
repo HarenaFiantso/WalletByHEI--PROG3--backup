@@ -1,7 +1,7 @@
 package com.wallet.model;
 
-import com.wallet.annotation.DatabaseField;
-import com.wallet.annotation.Table;
+import com.wallet.annotations.DatabaseField;
+import com.wallet.annotations.Table;
 import com.wallet.model.type.CurrencyCodeType;
 import com.wallet.model.type.CurrencyNameType;
 import lombok.AllArgsConstructor;

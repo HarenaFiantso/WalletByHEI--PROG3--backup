@@ -1,7 +1,7 @@
 package com.wallet.repository.utils;
 
-import com.wallet.annotation.DatabaseField;
-import com.wallet.annotation.Table;
+import com.wallet.annotations.DatabaseField;
+import com.wallet.annotations.Table;
 import com.wallet.handers.TableDefinition;
 
 import java.lang.reflect.Field;

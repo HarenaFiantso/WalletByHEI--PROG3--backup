@@ -1,7 +1,7 @@
 package com.wallet.model;
 
-import com.wallet.annotation.DatabaseField;
-import com.wallet.annotation.Table;
+import com.wallet.annotations.DatabaseField;
+import com.wallet.annotations.Table;
 import com.wallet.model.type.AccountType;
 import java.time.LocalDateTime;
 import java.util.List;
