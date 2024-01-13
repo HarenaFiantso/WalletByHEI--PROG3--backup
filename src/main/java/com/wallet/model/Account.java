@@ -25,33 +25,16 @@ import lombok.NoArgsConstructor;
 @DatabaseTable(name = "account")
 public class Account {
 
-  @DatabaseField(
-      name = "account_id",
-      identity = true,
-      generative = GenerativeValue.SEQUENCE
-  )
+  @DatabaseField(name = "account_id", identity = true, generative = GenerativeValue.SEQUENCE)
   private Long accountId;
 
-  @DatabaseField(
-      name = "account_name",
-      columnType = ColumnType.VARCHAR,
-      required = true
-  )
+  @DatabaseField(name = "account_name", columnType = ColumnType.VARCHAR, required = true)
   private String accountName;
 
-  @DatabaseField(
-      name = "account_type",
-      columnType = ColumnType.TEXT,
-      required = true
-  )
+  @DatabaseField(name = "account_type", columnType = ColumnType.TEXT, required = true)
   private AccountType accountType;
 
-  @DatabaseField(
-      name = "currency_id",
-      columnType = ColumnType.INT,
-      references = true,
-      required = true
-  )
+  @DatabaseField(name = "currency_id", columnType = ColumnType.INT, references = true, required = true)
   private int currencyId;
 
   private Double balance;
