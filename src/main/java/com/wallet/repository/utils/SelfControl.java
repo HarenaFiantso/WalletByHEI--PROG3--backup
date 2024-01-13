@@ -1,6 +1,6 @@
 package com.wallet.repository.utils;
 
-import com.wallet.annotation.Column;
+import com.wallet.annotation.DatabaseField;
 import com.wallet.annotation.Table;
 import com.wallet.handers.TableDefinition;
 
@@ -99,7 +99,7 @@ public class SelfControl<T> {
     Object returnedValue = getMethodGetterValue(value, fieldName);
 
     Field privateField = value.getClass().getDeclaredField(fieldName);
-    Column fieldColumn = privateField.getAnnotation(Column.class);
+    DatabaseField fieldColumn = privateField.getAnnotation(DatabaseField.class);
     if(fieldColumn.references()){
       TableDefinition<?> getReferenceTable = new TableDefinition<>(returnedValue.getClass());
       String fieldRefName = getReferenceTable.getId().getJavaColumnName();
@@ -139,7 +139,7 @@ public class SelfControl<T> {
   }
 
   private void setValueToField(T instance, String fieldName, Field field, Object value) throws Exception {
-    Column annotatedColumn = field.getAnnotation(Column.class);
+    DatabaseField annotatedColumn = field.getAnnotation(DatabaseField.class);
     if(annotatedColumn == null) return;
 
     if(!annotatedColumn.references()){

@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import com.wallet.annotation.Column;
+import com.wallet.annotation.DatabaseField;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ import com.wallet.annotation.Column;
 public class ColumnDefinition {
   private String javaColumnName;
   private String postgresColumnName;
-  private Column columnAnnotation;
+  private DatabaseField columnAnnotation;
   private String value;
 
   private String javaType;

@@ -1,6 +1,6 @@
 package com.wallet.model;
 
-import com.wallet.annotation.Column;
+import com.wallet.annotation.DatabaseField;
 import com.wallet.annotation.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -12,18 +12,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true)
 @Table(name = "currency_value")
 public class CurrencyValue {
-  @Column(name = "currency_value_id")
+  @DatabaseField(name = "currency_value_id")
   private Long currencyValueId;
 
-  @Column(name = "currency_value_date")
+  @DatabaseField(name = "currency_value_date")
   private LocalDateTime currencyValueDate;
 
-  @Column(name = "exchange_rate")
+  @DatabaseField(name = "exchange_rate")
   private Double exchangeRate;
 
-  @Column(name = "destination_currency_id")
+  @DatabaseField(name = "destination_currency_id")
   private int destinationCurrencyId;
 
-  @Column(name = "source_currency_id")
+  @DatabaseField(name = "source_currency_id")
   private int sourceCurrencyId;
 }

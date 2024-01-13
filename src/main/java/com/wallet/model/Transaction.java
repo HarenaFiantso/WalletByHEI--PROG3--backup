@@ -1,6 +1,6 @@
 package com.wallet.model;
 
-import com.wallet.annotation.Column;
+import com.wallet.annotation.DatabaseField;
 import com.wallet.annotation.Table;
 import com.wallet.model.type.TransactionType;
 import java.sql.Timestamp;
@@ -13,24 +13,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true)
 @Table(name = "transaction")
 public class Transaction {
-  @Column(name = "transaction_id")
+  @DatabaseField(name = "transaction_id")
   private Long transactionId;
 
-  @Column(name = "amount")
+  @DatabaseField(name = "amount")
   private Double amount;
 
-  @Column(name = "label")
+  @DatabaseField(name = "label")
   private String label;
 
-  @Column(name = "transaction_date")
+  @DatabaseField(name = "transaction_date")
   private Timestamp transactionDate;
 
-  @Column(name = "transaction_type")
+  @DatabaseField(name = "transaction_type")
   private TransactionType transactionType;
 
-  @Column(name = "account_id")
+  @DatabaseField(name = "account_id")
   private int accountId;
 
-  @Column(name = "category_id")
+  @DatabaseField(name = "category_id")
   private int categoryId;
 }

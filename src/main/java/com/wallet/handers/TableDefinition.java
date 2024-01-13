@@ -1,7 +1,7 @@
 package com.wallet.handers;
 
 import lombok.*;
-import com.wallet.annotation.Column;
+import com.wallet.annotation.DatabaseField;
 import com.wallet.annotation.ColumnType;
 import com.wallet.annotation.Table;
 
@@ -74,14 +74,14 @@ public class TableDefinition<T> {
 
   private void readAllField(Field[] fields){
     for (Field field : fields) {
-      Column column = field.getAnnotation(Column.class);
+      DatabaseField column = field.getAnnotation(DatabaseField.class);
       if(column != null){
         defineColumn(field, column);
       }
     }
   }
 
-  private void defineColumn(Field field, Column columnAnnotation){
+  private void defineColumn(Field field, DatabaseField columnAnnotation){
     ColumnDefinition definition = new ColumnDefinition();
     String javaCol = field.getName();
     definition.setJavaColumnName(javaCol);
@@ -102,7 +102,7 @@ public class TableDefinition<T> {
     }
   }
 
-  private String parseColumnName(Field field, Column column){
+  private String parseColumnName(Field field, DatabaseField column){
     String customColumnName = column.name().trim();
     if(!customColumnName.isEmpty()){
       return customColumnName;
@@ -110,7 +110,7 @@ public class TableDefinition<T> {
     return field.getName().toLowerCase();
   }
 
-  private String parsePsqlType(Field field, Column column){
+  private String parsePsqlType(Field field, DatabaseField column){
     String type;
 
     String definedOnAnnotation = column.columnType();

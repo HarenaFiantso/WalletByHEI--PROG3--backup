@@ -1,6 +1,6 @@
 package com.wallet.model;
 
-import com.wallet.annotation.Column;
+import com.wallet.annotation.DatabaseField;
 import com.wallet.annotation.Table;
 import com.wallet.model.type.CurrencyCodeType;
 import com.wallet.model.type.CurrencyNameType;
@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true)
 @Table(name = "currency")
 public class Currency {
-  @Column(name = "currency_id")
+  @DatabaseField(name = "currency_id")
   private Long currencyId;
 
-  @Column(name = "currency_name")
+  @DatabaseField(name = "currency_name")
   private CurrencyNameType currencyName;
 
-  @Column(name = "currency_code")
+  @DatabaseField(name = "currency_code")
   private CurrencyCodeType currencyCode;
 }

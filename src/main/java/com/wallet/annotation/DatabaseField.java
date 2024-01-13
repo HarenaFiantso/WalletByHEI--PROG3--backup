@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Column {
+@Target(ElementType.FIELD)
+public @interface DatabaseField {
   String name() default "";
   String defaultValue() default "";
   String columnType() default ColumnType.NONE;
