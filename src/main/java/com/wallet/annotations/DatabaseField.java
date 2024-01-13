@@ -1,5 +1,8 @@
 package com.wallet.annotations;
 
+import com.wallet.annotations.type.ColumnType;
+import com.wallet.annotations.type.GenerativeValue;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

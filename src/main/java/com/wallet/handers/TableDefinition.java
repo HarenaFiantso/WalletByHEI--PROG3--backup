@@ -2,7 +2,7 @@ package com.wallet.handers;
 
 import lombok.*;
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.ColumnType;
+import com.wallet.annotations.type.ColumnType;
 import com.wallet.annotations.Table;
 
 import java.lang.reflect.Field;
