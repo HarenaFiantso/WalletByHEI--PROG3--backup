@@ -1,10 +1,10 @@
-package com.wallet.repository.implementations;
+package com.wallet.repositories.implementations;
 
 import com.wallet.database.ConnectionToDb;
 import com.wallet.entities.Account;
 import com.wallet.entities.Transaction;
 import com.wallet.types.TransactionType;
-import com.wallet.repository.CrudOperations;
+import com.wallet.repositories.CrudOperations;
 
 import java.sql.*;
 import java.util.ArrayList;

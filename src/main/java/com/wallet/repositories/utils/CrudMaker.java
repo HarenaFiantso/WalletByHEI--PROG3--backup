@@ -1,6 +1,6 @@
-package com.wallet.repository.utils;
+package com.wallet.repositories.utils;
 
-import com.wallet.repository.CrudOperations;
+import com.wallet.repositories.CrudOperations;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

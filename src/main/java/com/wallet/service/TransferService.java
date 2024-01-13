@@ -1,10 +1,10 @@
 package com.wallet.service;
 
 import com.wallet.entities.*;
-import com.wallet.repository.implementations.CurrencyCrudOperations;
-import com.wallet.repository.implementations.CurrencyValueCrudOperations;
-import com.wallet.repository.implementations.TransactionCrudOperations;
-import com.wallet.repository.implementations.TransferHistoryCrudOperations;
+import com.wallet.repositories.implementations.CurrencyCrudOperations;
+import com.wallet.repositories.implementations.CurrencyValueCrudOperations;
+import com.wallet.repositories.implementations.TransactionCrudOperations;
+import com.wallet.repositories.implementations.TransferHistoryCrudOperations;
 import com.wallet.types.TransactionType;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

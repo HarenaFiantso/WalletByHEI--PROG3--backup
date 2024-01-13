@@ -1,4 +1,4 @@
-package com.wallet.repository;
+package com.wallet.repositories;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

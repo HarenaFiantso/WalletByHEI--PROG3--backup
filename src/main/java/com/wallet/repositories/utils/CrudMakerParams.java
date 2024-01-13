@@ -1,4 +1,4 @@
-package com.wallet.repository.utils;
+package com.wallet.repositories.utils;
 
 import lombok.Builder;
 import lombok.Getter;
