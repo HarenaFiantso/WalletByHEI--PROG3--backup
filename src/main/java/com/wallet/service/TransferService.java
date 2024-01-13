@@ -1,7 +1,7 @@
 package com.wallet.service;
 
 import com.wallet.entities.*;
-import com.wallet.repositories.operations.CurrencyCrudOperations;
+import com.wallet.repositories.operations.CurrencyCrudOp;
 import com.wallet.repositories.operations.CurrencyValueCrudOperations;
 import com.wallet.repositories.operations.TransactionCrudOperations;
 import com.wallet.repositories.operations.TransferHistoryCrudOperations;
@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class TransferService {
-  private final CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations();
+  private final CurrencyCrudOp currencyCrudOperations = new CurrencyCrudOp();
   private final CurrencyValueCrudOperations currencyValueCrudOperations =
       new CurrencyValueCrudOperations();
   TransactionCrudOperations transactionCrudOperations = new TransactionCrudOperations();

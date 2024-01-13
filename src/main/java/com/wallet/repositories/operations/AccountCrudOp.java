@@ -17,7 +17,6 @@ public class AccountCrudOp extends CrudOperationsImpl<Account> {
             .entityClass(Account.class)
             .createColumnSet(new String[]{ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_ID})
             .updateByColumn(ACCOUNT_ID)
-            .updatableColumns(new String[]{ACCOUNT_NAME})
             .deleteByAColumn(ACCOUNT_ID)
             .build()
     );
