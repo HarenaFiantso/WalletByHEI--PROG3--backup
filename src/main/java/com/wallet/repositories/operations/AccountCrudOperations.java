@@ -166,7 +166,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
   }
 
   @Override
-  public void delete(Account toDelete) {
+  public Account delete(Account toDelete) {
     Connection connection = null;
     PreparedStatement statement = null;
 
@@ -180,6 +180,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     } finally {
       closeResources(connection, statement, null);
     }
+    return null;
   }
 
   @Override

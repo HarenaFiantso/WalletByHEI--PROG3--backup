@@ -165,7 +165,7 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
   }
 
   @Override
-  public void delete(Currency toDelete) {
+  public Currency delete(Currency toDelete) {
     Connection connection = null;
     PreparedStatement statement = null;
 
@@ -179,6 +179,7 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
     } finally {
       closeResources(connection, statement, null);
     }
+    return null;
   }
 
   @Override

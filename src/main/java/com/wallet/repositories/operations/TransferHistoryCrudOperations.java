@@ -167,7 +167,7 @@ public class TransferHistoryCrudOperations implements CrudOperations<TransferHis
   }
 
   @Override
-  public void delete(TransferHistory toDelete) {
+  public TransferHistory delete(TransferHistory toDelete) {
     Connection connection = null;
     PreparedStatement statement = null;
 
@@ -181,6 +181,7 @@ public class TransferHistoryCrudOperations implements CrudOperations<TransferHis
     } finally {
       closeResources(connection, statement, null);
     }
+    return null;
   }
 
   @Override

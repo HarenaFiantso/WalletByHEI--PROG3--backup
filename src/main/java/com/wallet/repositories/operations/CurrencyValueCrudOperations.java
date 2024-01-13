@@ -49,7 +49,9 @@ public class CurrencyValueCrudOperations implements CrudOperations<CurrencyValue
   }
 
   @Override
-  public void delete(CurrencyValue toDelete) {}
+  public CurrencyValue delete(CurrencyValue toDelete) {
+    return null;
+  }
 
   @Override
   public void closeResources(

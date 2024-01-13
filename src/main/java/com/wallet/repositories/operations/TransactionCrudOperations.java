@@ -185,7 +185,7 @@ public class TransactionCrudOperations implements CrudOperations<Transaction> {
   }
 
   @Override
-  public void delete(Transaction toDelete) {
+  public Transaction delete(Transaction toDelete) {
     Connection connection = null;
     PreparedStatement statement = null;
 
@@ -199,6 +199,7 @@ public class TransactionCrudOperations implements CrudOperations<Transaction> {
     } finally {
       closeResources(connection, statement, null);
     }
+    return null;
   }
 
   @Override

@@ -6,19 +6,17 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public interface CrudOperations<T> {
-  T findById(Long toFind);
+  T findById(T toFind);
 
   List<T> findAll();
 
-  List<T> saveAll(List<T> toSave);
-
-  List<T> updateAll(List<T> toUpdate);
+  List<T> saveAll(List<T> toSaves);
 
   T save(T toSave);
 
   T update(T toUpdate);
 
-  void delete(T toDelete);
+  T delete(T toDelete);
 
   void closeResources(Connection connection, PreparedStatement statement, ResultSet resultSet);
 }
