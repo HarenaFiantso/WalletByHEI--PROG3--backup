@@ -2,8 +2,8 @@ package com.wallet.service;
 
 import com.wallet.entities.*;
 import com.wallet.repositories.operations.CurrencyCrudOp;
-import com.wallet.repositories.operations.CurrencyValueCrudOperations;
-import com.wallet.repositories.operations.TransactionCrudOperations;
+import com.wallet.repositories.operations.CurrencyValueCrudOp;
+import com.wallet.repositories.operations.TransactionCrudOp;
 import com.wallet.repositories.operations.TransferHistoryCrudOperations;
 import com.wallet.types.TransactionType;
 import java.sql.Timestamp;
@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 
 public class TransferService {
   private final CurrencyCrudOp currencyCrudOperations = new CurrencyCrudOp();
-  private final CurrencyValueCrudOperations currencyValueCrudOperations =
-      new CurrencyValueCrudOperations();
-  TransactionCrudOperations transactionCrudOperations = new TransactionCrudOperations();
+  private final CurrencyValueCrudOp currencyValueCrudOperations =
+      new CurrencyValueCrudOp();
+  TransactionCrudOp transactionCrudOperations = new TransactionCrudOp();
   private final TransferHistoryCrudOperations transferHistoryCrudOperations =
       new TransferHistoryCrudOperations();
 
@@ -62,8 +62,8 @@ public class TransferService {
       throw new IllegalArgumentException("Accounts should be different (EUR -> MGA) ");
     }
 
-    Currency sourceCurrency = getCurrencyById((long) debitAccount.getCurrencyId());
-    Currency destinationCurrency = getCurrencyById((long) creditAccount.getCurrencyId());
+    Currency sourceCurrency = getCurrencyById(debitAccount.getCurrencyId());
+    Currency destinationCurrency = getCurrencyById(creditAccount.getCurrencyId());
 
     if (!canConvertCurrencies()) {
       throw new IllegalArgumentException("Couldn't do currency conversion (EUR -> MGA)");
@@ -92,12 +92,14 @@ public class TransferService {
   }
 
   private Boolean canConvertCurrencies() {
-    /* TODO: If we want to allow conversion between EUR and MGA currencies, this method must be adjusted accordingly to
-    return true when conversion is possible, takes sourceCurrencyId and destinationCurrencyId as parameters */
+    /*
+     *  TODO: If we want to allow conversion between EUR and MGA currencies, this method must be adjusted accordingly to
+     *    return true when conversion is possible, takes sourceCurrencyId and destinationCurrencyId as parameters
+     *  */
     return false;
   }
 
-  private Currency getCurrencyById(Long currencyId) {
+  private Currency getCurrencyById(Currency currencyId) {
     return currencyCrudOperations.findById(currencyId);
   }
 

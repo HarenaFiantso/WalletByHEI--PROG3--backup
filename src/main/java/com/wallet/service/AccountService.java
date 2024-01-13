@@ -3,8 +3,8 @@ package com.wallet.service;
 import com.wallet.entities.Account;
 import com.wallet.entities.CurrencyValue;
 import com.wallet.entities.Transaction;
-import com.wallet.repositories.operations.CurrencyValueCrudOperations;
-import com.wallet.repositories.operations.TransactionCrudOperations;
+import com.wallet.repositories.operations.CurrencyValueCrudOp;
+import com.wallet.repositories.operations.TransactionCrudOp;
 import com.wallet.types.TransactionType;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -63,9 +63,9 @@ public class AccountService {
     return balanceHistory;
   }
 
-  TransactionCrudOperations transactionCrudOperations = new TransactionCrudOperations();
-  private final CurrencyValueCrudOperations currencyValueCrudOperations =
-      new CurrencyValueCrudOperations();
+  TransactionCrudOp transactionCrudOperations = new TransactionCrudOp();
+  private final CurrencyValueCrudOp currencyValueCrudOperations =
+      new CurrencyValueCrudOp();
 
   /* TODO: Create a function to transfer money between two accounts (fourth question b | first part)
    *   - Should write a test for this method */

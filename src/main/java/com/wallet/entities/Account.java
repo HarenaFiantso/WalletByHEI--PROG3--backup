@@ -37,7 +37,7 @@ public class Account {
       fieldType = FieldType.INT,
       references = true,
       required = true)
-  private int currencyId;
+  private Currency currencyId;
 
   private Double balance;
   private LocalDateTime lastTransactionDate;

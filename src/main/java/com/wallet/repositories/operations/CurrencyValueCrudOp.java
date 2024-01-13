@@ -1,12 +1,14 @@
 package com.wallet.repositories.operations;
 
 import com.wallet.config.ConnectionToDb;
+import com.wallet.entities.Currency;
 import com.wallet.entities.CurrencyValue;
-import com.wallet.repositories.CrudOperations;
-import java.sql.*;
-import java.util.List;
+import com.wallet.repositories.implementations.CrudMakerParams;
+import com.wallet.repositories.implementations.CrudOperationsImpl;
 
-public class CurrencyValueCrudOperations implements CrudOperations<CurrencyValue> {
+import java.sql.*;
+
+public class CurrencyValueCrudOp extends CrudOperationsImpl<CurrencyValue> {
   private static final String CURRENCY_VALUE_ID_COLUMN = "currency_value_id";
   private static final String CURRENCY_VALUE_DATE_COLUMN = "currency_value_date";
   private static final String EXCHANGE_RATE_COLUMN = "exchange_rate";
@@ -18,57 +20,16 @@ public class CurrencyValueCrudOperations implements CrudOperations<CurrencyValue
   private static final String SELECT_FOR_DATE =
       "SELECT * FROM currency_value WHERE currency_value_date = ?";
 
-  @Override
-  public CurrencyValue findById(Long toFind) {
-    return null;
-  }
-
-  @Override
-  public List<CurrencyValue> findAll() {
-    return null;
-  }
-
-  @Override
-  public List<CurrencyValue> saveAll(List<CurrencyValue> toSave) {
-    return null;
-  }
-
-  @Override
-  public List<CurrencyValue> updateAll(List<CurrencyValue> toUpdate) {
-    return null;
-  }
-
-  @Override
-  public CurrencyValue save(CurrencyValue toSave) {
-    return null;
-  }
-
-  @Override
-  public CurrencyValue update(CurrencyValue toUpdate) {
-    return null;
-  }
-
-  @Override
-  public CurrencyValue delete(CurrencyValue toDelete) {
-    return null;
-  }
-
-  @Override
-  public void closeResources(
-      Connection connection, PreparedStatement statement, ResultSet resultSet) {
-    try {
-      if (resultSet != null) {
-        resultSet.close();
-      }
-      if (statement != null) {
-        statement.close();
-      }
-      if (connection != null) {
-        connection.close();
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+  public CurrencyValueCrudOp() {
+    super(
+        CrudMakerParams
+            .builder()
+            .entityClass(Currency.class)
+            .createColumnSet(new String[]{CURRENCY_VALUE_DATE_COLUMN, EXCHANGE_RATE_COLUMN, SOURCE_CURRENCY_ID_COLUMN, DESTINATION_CURRENCY_ID_COLUMN})
+            .updateByColumn(CURRENCY_VALUE_ID_COLUMN)
+            .deleteByAColumn(CURRENCY_VALUE_ID_COLUMN)
+            .build()
+    );
   }
 
   public CurrencyValue findByCurrencies(int sourceCurrencyId, int destinationCurrencyId) {
