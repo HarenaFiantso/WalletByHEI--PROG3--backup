@@ -2,15 +2,12 @@ package com.wallet.entities;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
-
-import java.time.LocalDateTime;
-
 import com.wallet.annotations.FieldType;
 import com.wallet.types.GenerativeValue;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 /**
  * Represents a user account in the system.
@@ -33,9 +30,17 @@ public class CurrencyValue {
   @DatabaseField(name = "exchange_rate", fieldType = FieldType.DOUBLE, required = true)
   private Double exchangeRate;
 
-  @DatabaseField(name = "destination_currency_id", fieldType = FieldType.INT, references = true, required = true)
+  @DatabaseField(
+      name = "destination_currency_id",
+      fieldType = FieldType.INT,
+      references = true,
+      required = true)
   private int destinationCurrencyId;
 
-  @DatabaseField(name = "source_currency_id", fieldType = FieldType.INT, references = true, required = true)
+  @DatabaseField(
+      name = "source_currency_id",
+      fieldType = FieldType.INT,
+      references = true,
+      required = true)
   private int sourceCurrencyId;
 }

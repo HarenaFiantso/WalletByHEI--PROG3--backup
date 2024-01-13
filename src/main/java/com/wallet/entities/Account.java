@@ -3,12 +3,10 @@ package com.wallet.entities;
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
 import com.wallet.annotations.FieldType;
-import com.wallet.types.GenerativeValue;
 import com.wallet.types.AccountType;
-
+import com.wallet.types.GenerativeValue;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +32,11 @@ public class Account {
   @DatabaseField(name = "account_type", fieldType = FieldType.TEXT, required = true)
   private AccountType accountType;
 
-  @DatabaseField(name = "currency_id", fieldType = FieldType.INT, references = true, required = true)
+  @DatabaseField(
+      name = "currency_id",
+      fieldType = FieldType.INT,
+      references = true,
+      required = true)
   private int currencyId;
 
   private Double balance;

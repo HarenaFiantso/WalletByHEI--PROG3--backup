@@ -3,8 +3,8 @@ package com.wallet.handers;
 public class TypeMapper {
   public static final String NO_TYPE_MAPPED = "<mapped-type>";
 
-  public static String get(String type){
-    return switch (type.toLowerCase()){
+  public static String get(String type) {
+    return switch (type.toLowerCase()) {
       case "boolean" -> "boolean";
       case "int", "integer" -> "integer";
       case "long", "bigintger", "bigint" -> "bigint";
@@ -19,8 +19,8 @@ public class TypeMapper {
     };
   }
 
-  public static String typeToSequence(String type){
-    return switch (type){
+  public static String typeToSequence(String type) {
+    return switch (type) {
       case "smallint" -> "smallserial";
       case "bigint", "long" -> "bigserial";
       default -> "serial";

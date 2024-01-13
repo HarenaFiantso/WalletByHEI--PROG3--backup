@@ -3,13 +3,12 @@ package com.wallet.entities;
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
 import com.wallet.annotations.FieldType;
-import com.wallet.types.GenerativeValue;
 import com.wallet.types.CurrencyCodeType;
 import com.wallet.types.CurrencyNameType;
+import com.wallet.types.GenerativeValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 /**
  * Represents a user account in the system.

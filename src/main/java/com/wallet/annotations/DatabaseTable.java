@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface DatabaseTable {
   String name() default "";
+
   String schema() default "public";
 }

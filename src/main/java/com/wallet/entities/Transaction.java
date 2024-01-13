@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 /**
  * Represents a user account in the system.
  *
@@ -41,6 +40,10 @@ public class Transaction {
   @DatabaseField(name = "account_id", fieldType = FieldType.INT, references = true, required = true)
   private int accountId;
 
-  @DatabaseField(name = "category_id", fieldType = FieldType.INT, references = true, required = true)
+  @DatabaseField(
+      name = "category_id",
+      fieldType = FieldType.INT,
+      references = true,
+      required = true)
   private int categoryId;
 }
