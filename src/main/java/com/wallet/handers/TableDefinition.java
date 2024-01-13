@@ -3,7 +3,7 @@ package com.wallet.handers;
 import lombok.*;
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.type.ColumnType;
-import com.wallet.annotations.Table;
+import com.wallet.annotations.DatabaseTable;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -28,7 +28,7 @@ public class TableDefinition<T> {
   public TableDefinition(Class<T> classy) throws Exception {
     this.clazz = classy;
 
-    Table table = classy.getAnnotation(Table.class);
+    DatabaseTable table = classy.getAnnotation(DatabaseTable.class);
     if(table == null){
       String className = classy.getSimpleName();
       throw new Exception(STR."\{className} in: \{classy.getPackage()} is not an entity");
@@ -50,20 +50,20 @@ public class TableDefinition<T> {
     return mapColPsqlToJava.get(psqlColumn);
   }
 
-  private void doDefinition(Class<T> classy, Table table){
+  private void doDefinition(Class<T> classy, DatabaseTable table){
     parseSchema(table);
     parseTableName(classy, table);
     readAllField(classy.getDeclaredFields());
   }
 
-  private void parseSchema(Table table){
+  private void parseSchema(DatabaseTable table){
     String schema = table.schema();
     if(!Objects.equals(schema, "public")){
       this.schema = schema;
     }
   }
 
-  private void parseTableName(Class<T> classy, Table table){
+  private void parseTableName(Class<T> classy, DatabaseTable table){
     String customTableName = table.name().toLowerCase().trim();
     if(!customTableName.isEmpty()){
       this.name = customTableName;

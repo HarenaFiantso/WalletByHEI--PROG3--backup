@@ -1,7 +1,7 @@
 package com.wallet.model;
 
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.Table;
+import com.wallet.annotations.DatabaseTable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Table(name = "currency_value")
+@DatabaseTable(name = "currency_value")
 public class CurrencyValue {
   @DatabaseField(name = "currency_value_id")
   private Long currencyValueId;

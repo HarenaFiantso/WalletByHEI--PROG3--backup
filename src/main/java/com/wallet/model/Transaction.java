@@ -1,7 +1,7 @@
 package com.wallet.model;
 
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.Table;
+import com.wallet.annotations.DatabaseTable;
 import com.wallet.model.type.TransactionType;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Table(name = "transaction")
+@DatabaseTable(name = "transaction")
 public class Transaction {
   @DatabaseField(name = "transaction_id")
   private Long transactionId;

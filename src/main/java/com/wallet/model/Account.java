@@ -1,7 +1,7 @@
 package com.wallet.model;
 
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.Table;
+import com.wallet.annotations.DatabaseTable;
 import com.wallet.model.type.AccountType;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Table(name = "account")
+@DatabaseTable(name = "account")
 public class Account {
   @DatabaseField(name = "account_id")
   private Long accountId;

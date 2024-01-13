@@ -1,7 +1,7 @@
 package com.wallet.repository.utils;
 
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.Table;
+import com.wallet.annotations.DatabaseTable;
 import com.wallet.handers.TableDefinition;
 
 import java.lang.reflect.Field;
@@ -170,7 +170,7 @@ public class SelfControl<T> {
   }
 
   private String resultSetGetterName(Class<?> type) throws Exception {
-    Table checkTable = type.getAnnotation(Table.class);
+    DatabaseTable checkTable = type.getAnnotation(DatabaseTable.class);
     if(checkTable == null){
       String name = type.getSimpleName();
       return STR."get\{Character.toUpperCase(name.charAt(0))}\{name.substring(1)}";

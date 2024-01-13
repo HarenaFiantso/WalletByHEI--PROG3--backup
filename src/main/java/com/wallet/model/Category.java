@@ -1,7 +1,7 @@
 package com.wallet.model;
 
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.Table;
+import com.wallet.annotations.DatabaseTable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Table(name = "category")
+@DatabaseTable(name = "category")
 public class Category {
   @DatabaseField(name = "category_id")
   private Long categoryId;
