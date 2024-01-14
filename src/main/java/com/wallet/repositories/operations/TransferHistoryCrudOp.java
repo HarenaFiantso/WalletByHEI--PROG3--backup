@@ -2,8 +2,8 @@ package com.wallet.repositories.operations;
 
 import com.wallet.entities.Currency;
 import com.wallet.entities.TransferHistory;
-import com.wallet.repositories.implementations.CrudOperationsParams;
 import com.wallet.repositories.implementations.CrudOperationsImpl;
+import com.wallet.repositories.implementations.CrudOperationsParams;
 
 public class TransferHistoryCrudOp extends CrudOperationsImpl<TransferHistory> {
   private static final String TRANSFER_HISTORY_ID = "transfer_history_id";
@@ -13,13 +13,12 @@ public class TransferHistoryCrudOp extends CrudOperationsImpl<TransferHistory> {
 
   public TransferHistoryCrudOp() {
     super(
-        CrudOperationsParams
-            .builder()
+        CrudOperationsParams.builder()
             .entityClass(Currency.class)
-            .createColumnSet(new String[]{TRANSFER_DATE, DEBIT_TRANSACTION_ID, CREDIT_TRANSACTION_ID})
+            .createColumnSet(
+                new String[] {TRANSFER_DATE, DEBIT_TRANSACTION_ID, CREDIT_TRANSACTION_ID})
             .updateByColumn(TRANSFER_HISTORY_ID)
             .deleteByAColumn(TRANSFER_HISTORY_ID)
-            .build()
-    );
+            .build());
   }
 }

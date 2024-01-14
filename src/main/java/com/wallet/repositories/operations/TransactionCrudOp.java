@@ -25,8 +25,6 @@ public class TransactionCrudOp extends CrudOperationsImpl<Transaction> {
 
   private static final String SELECT_TRANSFERS_BETWEEN_ACCOUNTS =
       "SELECT * FROM transaction WHERE account_id = ? OR account_id = ?";
-  private static final String SELECT_BY_ACCOUNT_ID =
-      "SELECT * FROM transaction WHERE account_id = ?";
 
   public TransactionCrudOp() {
     super(

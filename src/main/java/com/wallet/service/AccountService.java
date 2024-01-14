@@ -64,8 +64,7 @@ public class AccountService {
   }
 
   TransactionCrudOp transactionCrudOperations = new TransactionCrudOp();
-  private final CurrencyValueCrudOp currencyValueCrudOperations =
-      new CurrencyValueCrudOp();
+  private final CurrencyValueCrudOp currencyValueCrudOperations = new CurrencyValueCrudOp();
 
   /* TODO: Create a function to transfer money between two accounts (fourth question b | first part)
    *   - Should write a test for this method */

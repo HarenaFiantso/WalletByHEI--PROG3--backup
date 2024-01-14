@@ -1,8 +1,8 @@
 package com.wallet.repositories.operations;
 
 import com.wallet.entities.Currency;
-import com.wallet.repositories.implementations.CrudOperationsParams;
 import com.wallet.repositories.implementations.CrudOperationsImpl;
+import com.wallet.repositories.implementations.CrudOperationsParams;
 
 public class CurrencyCrudOp extends CrudOperationsImpl<Currency> {
   private static final String CURRENCY_ID = "currency_id";
@@ -11,13 +11,11 @@ public class CurrencyCrudOp extends CrudOperationsImpl<Currency> {
 
   public CurrencyCrudOp() {
     super(
-        CrudOperationsParams
-            .builder()
+        CrudOperationsParams.builder()
             .entityClass(Currency.class)
-            .createColumnSet(new String[]{CURRENCY_NAME, CURRENCY_CODE})
+            .createColumnSet(new String[] {CURRENCY_NAME, CURRENCY_CODE})
             .updateByColumn(CURRENCY_ID)
             .deleteByAColumn(CURRENCY_ID)
-            .build()
-    );
+            .build());
   }
 }

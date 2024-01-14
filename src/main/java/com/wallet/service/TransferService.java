@@ -11,11 +11,9 @@ import java.time.LocalDateTime;
 
 public class TransferService {
   private final CurrencyCrudOp currencyCrudOperations = new CurrencyCrudOp();
-  private final CurrencyValueCrudOp currencyValueCrudOperations =
-      new CurrencyValueCrudOp();
+  private final CurrencyValueCrudOp currencyValueCrudOperations = new CurrencyValueCrudOp();
   TransactionCrudOp transactionCrudOperations = new TransactionCrudOp();
-  private final TransferHistoryCrudOp transferHistoryCrudOperations =
-      new TransferHistoryCrudOp();
+  private final TransferHistoryCrudOp transferHistoryCrudOperations = new TransferHistoryCrudOp();
 
   /* TODO: Create a function to transfer money between two accounts (fourth question a)
    *   - Should write a test for this method */
