@@ -11,31 +11,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Generic repository providing CRUD operations for a given entity type.
+ *
+ * @param <T> the type of the entity this repository manages
+ */
 public class Repository<T> {
-  
-  private String COLUMN_CONDITION_DELETE_WHERE = "<column-condition-delete-where>";
-  private String READABLE_COLUMN = "<readable-column>";
-
-  protected String CSV_INSERT_VALUES = "<csv-insert-value>";
-  private String COLUMN_TO_INSERT = "<column-to-insert>";
-
-  protected String COLUMN_SET_UPDATABLE = "<column-set-updatable>";
-  private String COLUMN_CONDITION_FIND_WHERE = "<column-condition-where>";
 
   private TableDefinition<T> tableDefinition;
 
   private String tableName;
   private String schema;
 
-  protected String SAVE_QUERY;
-  protected String FIND_BY_ID_QUERY;
-  protected String FIND_ALL_QUERY;
-  protected String UPDATE_QUERY;
-  protected String DELETE_QUERY;
+  protected String saveQuery;
+  protected String findByIdQuery;
+  protected String findAllQuery;
+  protected String updateQuery;
+  protected String deleteQuery;
 
   private final List<String> mappedReturnColumns;
   private final CrudOperationsParams crudParams;
 
+  /**
+   * Constructs a new Repository with the specified CRUD operation parameters.
+   *
+   * @param crudParams the parameters defining CRUD operations for this repository
+   */
   public Repository(CrudOperationsParams crudParams) {
     this.crudParams = crudParams;
     initializeClass(crudParams);
@@ -43,23 +44,69 @@ public class Repository<T> {
     this.mappedReturnColumns = mapCleanReturnColumn(crudParams.getReadReturnColumns(), this.tableDefinition.mapColumns());
   }
 
+  /**
+   * Initializes SQL queries based on the table definition and CRUD parameters.
+   */
   private void initializeQueries() {
-    List<String> cleanInserts = mapCleanReturnColumn(crudParams.getCreateColumnSet(), this.tableDefinition.mapColumns());
-    this.COLUMN_TO_INSERT = String.join(", ", cleanInserts);
-    this.CSV_INSERT_VALUES = String.join(", ", Collections.nCopies(cleanInserts.size(), "?"));
-    this.READABLE_COLUMN = checkAndCleanGivenColumns(crudParams.getReadReturnColumns(), String.join(", ", this.tableDefinition.mapColumns()));
+    String columnsToInsert = joinColumns(crudParams.getCreateColumnSet());
+    String insertPlaceholders = createPlaceholderString(crudParams.getCreateColumnSet().length);
+    String readableColumns = getReadableColumns(crudParams.getReadReturnColumns());
 
-    String customFindBy = crudParams.getReadIdentityColumn();
-    this.COLUMN_CONDITION_FIND_WHERE = (customFindBy != null) ? customFindBy : this.tableDefinition.getId().getPostgresColumnName();
+    String columnConditionFindWhere = getDefaultOrCustom(crudParams.getReadIdentityColumn(), tableDefinition.getId().getPostgresColumnName());
+    String columnConditionDeleteWhere = getDefaultOrCustom(crudParams.getDeleteByAColumn(), tableDefinition.getId().getPostgresColumnName());
 
-    String customDeleteColumn = crudParams.getDeleteByAColumn();
-    COLUMN_CONDITION_DELETE_WHERE = (customDeleteColumn != null) ? customDeleteColumn : COLUMN_CONDITION_DELETE_WHERE;
+    saveQuery = constructSaveQuery(columnsToInsert, insertPlaceholders, readableColumns);
+    findByIdQuery = constructFindByIdQuery(readableColumns, columnConditionFindWhere);
+    findAllQuery = constructFindAllQuery(readableColumns);
+    updateQuery = constructUpdateQuery(crudParams.getUpdatableColumns(), columnConditionFindWhere, readableColumns);
+    deleteQuery = constructDeleteQuery(columnConditionDeleteWhere, readableColumns);
+  }
 
-    doSaveQuery();
-    doFindByIdQuery();
-    doFindAllQuery();
-    doUpdateQuery();
-    doDeleteQuery();
+  // ... (Utility methods like joinColumns, createPlaceholderString, getReadableColumns, etc.)
+  private String joinColumns(String[] columns) {
+    List<String> cleanInserts = mapCleanReturnColumn(columns, tableDefinition.mapColumns());
+    return String.join(", ", cleanInserts);
+  }
+
+  private String createPlaceholderString(int count) {
+    return String.join(", ", Collections.nCopies(count, "?"));
+  }
+
+  private String getReadableColumns(String[] columns) {
+    return checkAndCleanGivenColumns(columns, String.join(", ", tableDefinition.mapColumns()));
+  }
+
+  private String getDefaultOrCustom(String customValue, String defaultValue) {
+    return (customValue != null) ? customValue : defaultValue;
+  }
+
+  // ... (Methods for constructing SQL queries like constructSaveQuery, constructFindByIdQuery, etc.)
+  private String constructSaveQuery(String columnsToInsert, String insertPlaceholders, String readableColumns) {
+    return String.format("INSERT INTO %s (%s) VALUES (%s) RETURNING %s",
+        getSchemaTable(), columnsToInsert, insertPlaceholders, readableColumns);
+  }
+
+  private String constructFindByIdQuery(String readableColumns, String columnConditionFindWhere) {
+    return String.format("SELECT %s FROM %s WHERE %s = ?", readableColumns, getSchemaTable(), columnConditionFindWhere);
+  }
+
+  private String constructFindAllQuery(String readableColumns) {
+    return String.format("SELECT %s FROM %s", readableColumns, getSchemaTable());
+  }
+
+  private String constructUpdateQuery(String[] updatableColumns, String columnConditionFindWhere, String readableColumns) {
+    String columnsSet = joinColumns(updatableColumns);
+    return String.format("UPDATE %s SET %s WHERE %s = ? RETURNING %s",
+        getSchemaTable(), columnsSet, columnConditionFindWhere, readableColumns);
+  }
+
+  private String constructDeleteQuery(String columnConditionDeleteWhere, String readableColumns) {
+    return String.format("DELETE FROM %s WHERE %s = ? RETURNING %s",
+        getSchemaTable(), columnConditionDeleteWhere, readableColumns);
+  }
+
+  private String getSchemaTable() {
+    return String.format("%s.%s", schema, tableName);
   }
 
   private List<String> mapCleanReturnColumn(String[] columns, List<String> defaultColumns) {
@@ -75,6 +122,7 @@ public class Repository<T> {
     return cleanColumns;
   }
 
+  // ... (Methods for handling reflection operations like getMethodGetterValue, getFieldValue, etc.)
   private Object getMethodGetterValue(Object value, String fieldName) throws Exception {
     return value.getClass()
         .getMethod(STR."get\{Character.toUpperCase(fieldName.charAt(0))}\{fieldName.substring(1)}").invoke(value);
@@ -142,7 +190,9 @@ public class Repository<T> {
     }
 
     TableDefinition<?> tableDefinition = new TableDefinition<>(type);
-    return STR."get\{tableDefinition.getId().getJavaType()}";
+    Class<?> idType = tableDefinition.getId().getJavaType().getClass();
+    String idTypeName = idType.getSimpleName();
+    return STR."get\{Character.toUpperCase(idTypeName.charAt(0))}\{idTypeName.substring(1)}";
   }
 
   protected T mapResultSetToInstance(ResultSet result) throws Exception {
@@ -183,35 +233,6 @@ public class Repository<T> {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-  }
-
-  private String getSchemaTable() {
-    return STR."\{schema}.\"\{tableName}\"";
-  }
-
-  private void doSaveQuery() {
-    this.SAVE_QUERY = String.format("INSERT INTO %s (%s) VALUES (%s) RETURNING %s",
-        getSchemaTable(), COLUMN_TO_INSERT, CSV_INSERT_VALUES, READABLE_COLUMN);
-  }
-
-  private void doFindByIdQuery() {
-    this.FIND_BY_ID_QUERY = String.format("SELECT %s FROM %s WHERE %s = ?", READABLE_COLUMN, getSchemaTable(), COLUMN_CONDITION_FIND_WHERE);
-  }
-
-  private void doFindAllQuery() {
-    this.FIND_ALL_QUERY = String.format("SELECT %s FROM %s", READABLE_COLUMN, getSchemaTable());
-  }
-
-  private void doUpdateQuery() {
-    List<String> updates = mapCleanReturnColumn(crudParams.getUpdatableColumns(), this.tableDefinition.mapColumns());
-    this.COLUMN_SET_UPDATABLE = String.join(", ", updates.stream().map(s -> STR."\{s} = ?").toList());
-    this.UPDATE_QUERY = String.format("UPDATE %s SET %s WHERE %s = ? RETURNING %s",
-        getSchemaTable(), COLUMN_SET_UPDATABLE, getUpdateColumnConditioner(), READABLE_COLUMN);
-  }
-
-  private void doDeleteQuery() {
-    this.DELETE_QUERY = String.format("DELETE FROM %s WHERE %s = ? RETURNING %s",
-        getSchemaTable(), COLUMN_CONDITION_DELETE_WHERE, READABLE_COLUMN);
   }
 
   private String getUpdateColumnConditioner() {
