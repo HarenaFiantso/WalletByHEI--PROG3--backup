@@ -34,9 +34,9 @@ public class Repository<T> {
   protected String DELETE_QUERY;
 
   private final List<String> mappedReturnColumns;
-  private final CrudMakerParams crudParams;
+  private final CrudOperationsParams crudParams;
 
-  public Repository(CrudMakerParams crudParams) {
+  public Repository(CrudOperationsParams crudParams) {
     this.crudParams = crudParams;
     initializeClass(crudParams);
     initializeQueries();
@@ -173,7 +173,7 @@ public class Repository<T> {
     return checkAndCleanGivenColumns(column);
   }
 
-  private void initializeClass(CrudMakerParams params) {
+  private void initializeClass(CrudOperationsParams params) {
     Class<?> capture = params.getEntityClass();
     Class<T> classy = (Class<T>) capture;
     try {

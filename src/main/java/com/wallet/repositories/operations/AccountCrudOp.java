@@ -1,7 +1,7 @@
 package com.wallet.repositories.operations;
 
 import com.wallet.entities.Account;
-import com.wallet.repositories.implementations.CrudMakerParams;
+import com.wallet.repositories.implementations.CrudOperationsParams;
 import com.wallet.repositories.implementations.CrudOperationsImpl;
 
 public class AccountCrudOp extends CrudOperationsImpl<Account> {
@@ -12,7 +12,7 @@ public class AccountCrudOp extends CrudOperationsImpl<Account> {
 
   public AccountCrudOp() {
     super(
-        CrudMakerParams
+        CrudOperationsParams
             .builder()
             .entityClass(Account.class)
             .createColumnSet(new String[]{ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_ID})

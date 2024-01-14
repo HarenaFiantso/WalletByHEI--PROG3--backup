@@ -3,7 +3,7 @@ package com.wallet.repositories.operations;
 import com.wallet.config.ConnectionToDb;
 import com.wallet.entities.Currency;
 import com.wallet.entities.CurrencyValue;
-import com.wallet.repositories.implementations.CrudMakerParams;
+import com.wallet.repositories.implementations.CrudOperationsParams;
 import com.wallet.repositories.implementations.CrudOperationsImpl;
 
 import java.sql.*;
@@ -22,7 +22,7 @@ public class CurrencyValueCrudOp extends CrudOperationsImpl<CurrencyValue> {
 
   public CurrencyValueCrudOp() {
     super(
-        CrudMakerParams
+        CrudOperationsParams
             .builder()
             .entityClass(Currency.class)
             .createColumnSet(new String[]{CURRENCY_VALUE_DATE_COLUMN, EXCHANGE_RATE_COLUMN, SOURCE_CURRENCY_ID_COLUMN, DESTINATION_CURRENCY_ID_COLUMN})

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CrudMakerParams {
+public class CrudOperationsParams {
   private Class<?> entityClass;
   private String[] createColumnSet;
   private String[] readReturnColumns;

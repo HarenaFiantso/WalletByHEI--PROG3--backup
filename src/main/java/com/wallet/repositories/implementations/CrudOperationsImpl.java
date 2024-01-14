@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperations<T> {
 
-  public CrudOperationsImpl(CrudMakerParams params) {
+  public CrudOperationsImpl(CrudOperationsParams params) {
     super(params);
   }
 

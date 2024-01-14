@@ -1,8 +1,7 @@
 package com.wallet.repositories.operations;
 
-import com.wallet.entities.Currency;
 import com.wallet.entities.Transaction;
-import com.wallet.repositories.implementations.CrudMakerParams;
+import com.wallet.repositories.implementations.CrudOperationsParams;
 import com.wallet.repositories.implementations.CrudOperationsImpl;
 
 public class TransactionCrudOp extends CrudOperationsImpl<Transaction> {
@@ -15,7 +14,7 @@ public class TransactionCrudOp extends CrudOperationsImpl<Transaction> {
 
   public TransactionCrudOp() {
     super(
-        CrudMakerParams
+        CrudOperationsParams
             .builder()
             .entityClass(Transaction.class)
             .createColumnSet(new String[]{AMOUNT, LABEL, TRANSACTION_DATE, TRANSACTION_TYPE, ACCOUNT_ID})

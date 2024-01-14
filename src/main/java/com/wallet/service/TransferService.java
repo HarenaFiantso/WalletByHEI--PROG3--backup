@@ -4,7 +4,7 @@ import com.wallet.entities.*;
 import com.wallet.repositories.operations.CurrencyCrudOp;
 import com.wallet.repositories.operations.CurrencyValueCrudOp;
 import com.wallet.repositories.operations.TransactionCrudOp;
-import com.wallet.repositories.operations.TransferHistoryCrudOperations;
+import com.wallet.repositories.operations.TransferHistoryCrudOp;
 import com.wallet.types.TransactionType;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -14,8 +14,8 @@ public class TransferService {
   private final CurrencyValueCrudOp currencyValueCrudOperations =
       new CurrencyValueCrudOp();
   TransactionCrudOp transactionCrudOperations = new TransactionCrudOp();
-  private final TransferHistoryCrudOperations transferHistoryCrudOperations =
-      new TransferHistoryCrudOperations();
+  private final TransferHistoryCrudOp transferHistoryCrudOperations =
+      new TransferHistoryCrudOp();
 
   /* TODO: Create a function to transfer money between two accounts (fourth question a)
    *   - Should write a test for this method */
