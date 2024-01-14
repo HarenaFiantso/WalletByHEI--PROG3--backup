@@ -38,7 +38,7 @@ public class Transaction {
   private TransactionType transactionType;
 
   @DatabaseField(name = "account_id", fieldType = FieldType.INT, references = true, required = true)
-  private Account accountId;
+  private int accountId;
 
   @DatabaseField(
       name = "category_id",
