@@ -1,6 +1,6 @@
 package com.wallet.repositories.implementations;
 
-import com.wallet.config.ConnectionToDb;
+import com.wallet.database.config.ConnectionToDb;
 import com.wallet.repositories.CrudOperations;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

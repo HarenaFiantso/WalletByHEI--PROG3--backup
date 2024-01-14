@@ -1,6 +1,6 @@
 package com.wallet.repositories.operations;
 
-import com.wallet.config.ConnectionToDb;
+import com.wallet.database.config.ConnectionToDb;
 import com.wallet.entities.Currency;
 import com.wallet.entities.CurrencyValue;
 import com.wallet.repositories.implementations.CrudOperationsParams;

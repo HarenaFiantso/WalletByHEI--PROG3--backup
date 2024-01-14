@@ -1,6 +1,6 @@
 package com.wallet;
 
-import com.wallet.config.ConnectionToDb;
+import com.wallet.database.config.ConnectionToDb;
 
 public class Main {
   public static void main(String[] args) {
