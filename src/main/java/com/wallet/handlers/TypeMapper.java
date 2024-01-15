@@ -1,4 +1,4 @@
-package com.wallet.handers;
+package com.wallet.handlers;
 
 public class TypeMapper {
   public static final String NO_TYPE_MAPPED = "<mapped-type>";
