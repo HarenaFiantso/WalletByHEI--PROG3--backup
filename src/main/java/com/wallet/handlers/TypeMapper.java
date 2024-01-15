@@ -18,12 +18,4 @@ public class TypeMapper {
       default -> NO_TYPE_MAPPED;
     };
   }
-
-  public static String typeToSequence(String type) {
-    return switch (type) {
-      case "smallint" -> "smallserial";
-      case "bigint", "long" -> "bigserial";
-      default -> "serial";
-    };
-  }
 }
