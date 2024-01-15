@@ -11,6 +11,7 @@ import java.util.*;
 @ToString
 @EqualsAndHashCode
 public class TableDefinition<T> {
+
   @Getter
   private String name;
   @Getter
@@ -29,59 +30,61 @@ public class TableDefinition<T> {
     this.clazz = classy;
 
     DatabaseTable table = classy.getAnnotation(DatabaseTable.class);
-    if(table == null){
+    if (table == null) {
       String className = classy.getSimpleName();
       throw new Exception(STR."\{className} in: \{classy.getPackage()} is not an entity");
     }
 
     doDefinition(classy, table);
-    if(id == null) throw new Exception("table should have an identity column (primary key)");
+    if (id == null) {
+      throw new Exception("Table should have an ID column (primary key)");
+    }
   }
 
-  public List<String> mapColumns(){
+  public List<String> mapColumns() {
     return columnName;
   }
 
-  public boolean containPsqlColumn(String column){
+  public boolean containPsqlColumn(String column) {
     return mapColPsqlToJava.containsKey(column);
   }
 
-  public String getJavaFieldFromPsqlColumn(String psqlColumn){
+  public String getJavaFieldFromPsqlColumn(String psqlColumn) {
     return mapColPsqlToJava.get(psqlColumn);
   }
 
-  private void doDefinition(Class<T> classy, DatabaseTable table){
+  private void doDefinition(Class<T> classy, DatabaseTable table) {
     parseSchema(table);
     parseTableName(classy, table);
     readAllField(classy.getDeclaredFields());
   }
 
-  private void parseSchema(DatabaseTable table){
+  private void parseSchema(DatabaseTable table) {
     String schema = table.schema();
-    if(!Objects.equals(schema, "public")){
+    if (!Objects.equals(schema, "public")) {
       this.schema = schema;
     }
   }
 
-  private void parseTableName(Class<T> classy, DatabaseTable table){
+  private void parseTableName(Class<T> classy, DatabaseTable table) {
     String customTableName = table.name().toLowerCase().trim();
-    if(!customTableName.isEmpty()){
+    if (!customTableName.isEmpty()) {
       this.name = customTableName;
-    }else {
+    } else {
       this.name = classy.getSimpleName().toLowerCase();
     }
   }
 
-  private void readAllField(Field[] fields){
+  private void readAllField(Field[] fields) {
     for (Field field : fields) {
       DatabaseField column = field.getAnnotation(DatabaseField.class);
-      if(column != null){
+      if (column != null) {
         defineColumn(field, column);
       }
     }
   }
 
-  private void defineColumn(Field field, DatabaseField columnAnnotation){
+  private void defineColumn(Field field, DatabaseField columnAnnotation) {
     ColumnDefinition definition = new ColumnDefinition();
     String javaCol = field.getName();
     definition.setJavaColumnName(javaCol);
@@ -97,26 +100,26 @@ public class TableDefinition<T> {
     definition.setPostgresType(parsePsqlType(field, columnAnnotation));
     if (columnAnnotation.identity() && this.id == null) {
       this.id = definition;
-    }else {
+    } else {
       otherColumns.add(definition);
     }
   }
 
-  private String parseColumnName(Field field, DatabaseField column){
+  private String parseColumnName(Field field, DatabaseField column) {
     String customColumnName = column.name().trim();
-    if(!customColumnName.isEmpty()){
+    if (!customColumnName.isEmpty()) {
       return customColumnName;
     }
     return field.getName().toLowerCase();
   }
 
-  private String parsePsqlType(Field field, DatabaseField column){
+  private String parsePsqlType(Field field, DatabaseField column) {
     String type;
 
     String definedOnAnnotation = column.fieldType();
-    if(!definedOnAnnotation.equals(FieldType.NONE)){
+    if (!definedOnAnnotation.equals(FieldType.NONE)) {
       type = definedOnAnnotation;
-    }else {
+    } else {
       String javaReturnType = field.getType().getSimpleName();
       type = TypeMapper.get(javaReturnType);
     }
