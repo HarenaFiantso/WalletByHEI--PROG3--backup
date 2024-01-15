@@ -1,4 +1,4 @@
-package com.wallet.service;
+package com.wallet.services;
 
 import com.wallet.entities.Account;
 import com.wallet.entities.CurrencyValue;

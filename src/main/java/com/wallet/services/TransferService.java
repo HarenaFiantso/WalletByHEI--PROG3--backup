@@ -1,4 +1,4 @@
-package com.wallet.service;
+package com.wallet.services;
 
 import com.wallet.entities.*;
 import com.wallet.repositories.operations.CurrencyCrudOp;
