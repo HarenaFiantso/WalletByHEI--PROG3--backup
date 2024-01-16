@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperations<T> {
-  private final String findById = this.findByIdQuery;
-  private final String findAll = this.findAllQuery;
-  private final String save = this.saveQuery;
-  private final String update = this.updateQuery;
-  private final String delete = this.deleteQuery;
+  private final String FIND_BY_ID_QUERY = this.findByIdQuery;
+  private final String FIND_ALL_QUERY = this.findAllQuery;
+  private final String SAVE_QUERY = this.saveQuery;
+  private final String UPDATE_QUERY = this.updateQuery;
+  private final String DELETE_QUERY = this.deleteQuery;
 
   public CrudOperationsImpl(CrudOperationsParams params) {
     super(params);
@@ -29,7 +29,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(findById);
+      statement = connection.prepareStatement(FIND_BY_ID_QUERY);
       this.wrapObjectToStatement(toFind, statement);
 
       resultSet = statement.executeQuery();
@@ -55,7 +55,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(findAll);
+      statement = connection.prepareStatement(FIND_ALL_QUERY);
 
       resultSet = statement.executeQuery();
 
@@ -98,7 +98,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(save);
+      statement = connection.prepareStatement(SAVE_QUERY);
       this.wrapObjectToStatement(toSave, statement);
 
       resultSet = statement.executeQuery();
@@ -123,7 +123,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(update);
+      statement = connection.prepareStatement(UPDATE_QUERY);
       this.wrapObjectToStatement(toUpdate, statement);
 
       resultSet = statement.executeQuery();
@@ -132,7 +132,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
         return this.mapResultSetToInstance(resultSet);
       }
     } catch (Exception e) {
-      throw new RuntimeException("Failed to update from this entity");
+      throw new RuntimeException("Failed to UPDATE_QUERY from this entity");
     } finally {
       closeResources(connection, statement, resultSet);
     }
@@ -148,7 +148,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(delete);
+      statement = connection.prepareStatement(DELETE_QUERY);
       this.wrapObjectToStatement(toDelete, statement);
 
       resultSet = statement.executeQuery();
@@ -157,7 +157,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
         return this.mapResultSetToInstance(resultSet);
       }
     } catch (Exception e) {
-      throw new RuntimeException("Failed to delete from this entity");
+      throw new RuntimeException("Failed to DELETE_QUERY from this entity");
     } finally {
       closeResources(connection, statement, resultSet);
     }
