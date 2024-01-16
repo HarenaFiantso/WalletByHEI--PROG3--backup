@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperations<T> {
+  private final String findById = this.findByIdQuery;
+  private final String findAll = this.findAllQuery;
+  private final String save = this.saveQuery;
+  private final String update = this.updateQuery;
+  private final String delete = this.deleteQuery;
 
   public CrudOperationsImpl(CrudOperationsParams params) {
     super(params);
@@ -24,7 +29,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(this.findByIdQuery);
+      statement = connection.prepareStatement(findById);
       this.wrapObjectToStatement(toFind, statement);
 
       resultSet = statement.executeQuery();
@@ -50,7 +55,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(this.findAllQuery);
+      statement = connection.prepareStatement(findAll);
 
       resultSet = statement.executeQuery();
 
@@ -93,7 +98,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(this.saveQuery);
+      statement = connection.prepareStatement(save);
       this.wrapObjectToStatement(toSave, statement);
 
       resultSet = statement.executeQuery();
@@ -118,7 +123,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(this.updateQuery);
+      statement = connection.prepareStatement(update);
       this.wrapObjectToStatement(toUpdate, statement);
 
       resultSet = statement.executeQuery();
@@ -143,7 +148,7 @@ public class CrudOperationsImpl<T> extends Repository<T> implements CrudOperatio
     try {
       connection = ConnectionToDb.getConnection();
 
-      statement = connection.prepareStatement(this.deleteQuery);
+      statement = connection.prepareStatement(delete);
       this.wrapObjectToStatement(toDelete, statement);
 
       resultSet = statement.executeQuery();
