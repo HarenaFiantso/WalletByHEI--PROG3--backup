@@ -1,4 +1,4 @@
-package com.wallet.handlers;
+package com.wallet.mappers;
 
 import java.util.HashMap;
 import java.util.Map;

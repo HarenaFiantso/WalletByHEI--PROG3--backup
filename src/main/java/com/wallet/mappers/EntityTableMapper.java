@@ -1,4 +1,4 @@
-package com.wallet.handlers;
+package com.wallet.mappers;
 
 import lombok.*;
 import com.wallet.annotations.DatabaseField;

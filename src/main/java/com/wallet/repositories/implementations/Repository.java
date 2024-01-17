@@ -2,7 +2,7 @@ package com.wallet.repositories.implementations;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
-import com.wallet.handlers.EntityTableMapper;
+import com.wallet.mappers.EntityTableMapper;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
