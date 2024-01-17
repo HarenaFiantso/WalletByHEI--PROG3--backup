@@ -121,7 +121,7 @@ public class EntityTableMapper<T> {
       type = definedOnAnnotation;
     } else {
       String javaReturnType = field.getType().getSimpleName();
-      type = TypeMapper.get(javaReturnType);
+      type = JavaToDatabaseTypeMapper.get(javaReturnType);
     }
 
     return type;
