@@ -41,7 +41,7 @@ public class Repository<T> {
     this.crudParams = crudParams;
     initializeClass(crudParams);
     initializeQueries();
-    this.mappedReturnColumns = mapCleanReturnColumn(crudParams.getReadReturnColumns(), this.tableDefinition.mapColumns());
+    this.mappedReturnColumns = mapCleanReturnColumn(crudParams.getReadReturnColumns(), this.tableDefinition.getColumnNames());
   }
 
   /**
@@ -52,8 +52,8 @@ public class Repository<T> {
     String insertPlaceholders = createPlaceholderString(crudParams.getCreateColumnSet().length);
     String readableColumns = getReadableColumns(crudParams.getReadReturnColumns());
 
-    String columnConditionFindWhere = getDefaultOrCustom(crudParams.getReadIdentityColumn(), tableDefinition.getId().getPostgresColumnName());
-    String columnConditionDeleteWhere = getDefaultOrCustom(crudParams.getDeleteByAColumn(), tableDefinition.getId().getPostgresColumnName());
+    String columnConditionFindWhere = getDefaultOrCustom(crudParams.getReadIdentityColumn(), tableDefinition.getPrimaryKeyColumn().getPostgresColumnName());
+    String columnConditionDeleteWhere = getDefaultOrCustom(crudParams.getDeleteByAColumn(), tableDefinition.getPrimaryKeyColumn().getPostgresColumnName());
 
     saveQuery = constructSaveQuery(columnsToInsert, insertPlaceholders, readableColumns);
     findByIdQuery = constructFindByIdQuery(readableColumns, columnConditionFindWhere);
@@ -64,7 +64,7 @@ public class Repository<T> {
 
   // ... (Utility methods like joinColumns, createPlaceholderString, getReadableColumns, etc.)
   private String joinColumns(String[] columns) {
-    List<String> cleanInserts = mapCleanReturnColumn(columns, tableDefinition.mapColumns());
+    List<String> cleanInserts = mapCleanReturnColumn(columns, tableDefinition.getColumnNames());
     return String.join(", ", cleanInserts);
   }
 
@@ -73,7 +73,7 @@ public class Repository<T> {
   }
 
   private String getReadableColumns(String[] columns) {
-    return checkAndCleanGivenColumns(columns, String.join(", ", tableDefinition.mapColumns()));
+    return checkAndCleanGivenColumns(columns, String.join(", ", tableDefinition.getColumnNames()));
   }
 
   private String getDefaultOrCustom(String customValue, String defaultValue) {
@@ -115,7 +115,7 @@ public class Repository<T> {
     }
     List<String> cleanColumns = new ArrayList<>();
     for (String column : columns) {
-      if (this.tableDefinition.containPsqlColumn(column)) {
+      if (this.tableDefinition.containsColumn(column)) {
         cleanColumns.add(column);
       }
     }
@@ -135,7 +135,7 @@ public class Repository<T> {
     DatabaseField fieldColumn = privateField.getAnnotation(DatabaseField.class);
     if (fieldColumn.references()) {
       EntityTableMapper<?> getReferenceTable = new EntityTableMapper<>(returnedValue.getClass());
-      String fieldRefName = getReferenceTable.getId().getJavaColumnName();
+      String fieldRefName = getReferenceTable.getPrimaryKeyColumn().getJavaColumnName();
       return getMethodGetterValue(returnedValue, fieldRefName);
     }
 
@@ -147,7 +147,7 @@ public class Repository<T> {
   }
 
   protected void wrapObjectToStatement(T value, PreparedStatement statement, boolean update) throws Exception {
-    List<String> cleanColumnInserts = mapCleanReturnColumn(update ? this.crudParams.getUpdatableColumns() : this.crudParams.getCreateColumnSet(), this.tableDefinition.mapColumns());
+    List<String> cleanColumnInserts = mapCleanReturnColumn(update ? this.crudParams.getUpdatableColumns() : this.crudParams.getCreateColumnSet(), this.tableDefinition.getColumnNames());
     if (update) {
       cleanColumnInserts.add(getUpdateColumnConditioner());
     }
@@ -168,18 +168,18 @@ public class Repository<T> {
     if (annotatedColumn == null) return;
 
     if (!annotatedColumn.references()) {
-      this.tableDefinition.getClazz().getMethod(fieldNameToMethodSetter(fieldName), field.getType()).invoke(instance, value);
+      this.tableDefinition.getEntityClass().getMethod(fieldNameToMethodSetter(fieldName), field.getType()).invoke(instance, value);
       return;
     }
     Class<?> returnedClassType = field.getType();
     EntityTableMapper<?> tableDefinition = new EntityTableMapper<>(returnedClassType);
     Object refInstance = returnedClassType.getDeclaredConstructor().newInstance();
-    String javaFieldName = tableDefinition.getId().getJavaColumnName();
+    String javaFieldName = tableDefinition.getPrimaryKeyColumn().getJavaColumnName();
     String setterMethod = fieldNameToMethodSetter(javaFieldName);
     Class<?> fieldType = returnedClassType.getDeclaredField(javaFieldName).getType();
 
     returnedClassType.getMethod(setterMethod, fieldType).invoke(refInstance, value);
-    this.tableDefinition.getClazz().getMethod(fieldNameToMethodSetter(fieldName), field.getType()).invoke(instance, refInstance);
+    this.tableDefinition.getEntityClass().getMethod(fieldNameToMethodSetter(fieldName), field.getType()).invoke(instance, refInstance);
   }
 
   private String resultSetGetterName(Class<?> type) throws Exception {
@@ -190,16 +190,16 @@ public class Repository<T> {
     }
 
     EntityTableMapper<?> tableDefinition = new EntityTableMapper<>(type);
-    Class<?> idType = tableDefinition.getId().getJavaType().getClass();
+    Class<?> idType = tableDefinition.getPrimaryKeyColumn().getJavaType().getClass();
     String idTypeName = idType.getSimpleName();
     return STR."get\{Character.toUpperCase(idTypeName.charAt(0))}\{idTypeName.substring(1)}";
   }
 
   protected T mapResultSetToInstance(ResultSet result) throws Exception {
-    T instance = this.tableDefinition.getClazz().getDeclaredConstructor().newInstance();
+    T instance = this.tableDefinition.getEntityClass().getDeclaredConstructor().newInstance();
     for (String returnColumn : mappedReturnColumns) {
       final String fieldName = this.tableDefinition.getJavaFieldFromPsqlColumn(returnColumn);
-      final Field field = this.tableDefinition.getClazz().getDeclaredField(fieldName);
+      final Field field = this.tableDefinition.getEntityClass().getDeclaredField(fieldName);
       final Class<?> type = field.getType();
       final Object value = result.getClass().getMethod(resultSetGetterName(type), String.class).invoke(result, returnColumn);
       setValueToField(instance, fieldName, field, value);
@@ -211,7 +211,7 @@ public class Repository<T> {
   private String checkAndCleanGivenColumns(String[] columns) {
     List<String> cleanColumns = new ArrayList<>();
     for (String column : columns) {
-      if (this.tableDefinition.containPsqlColumn(column)) {
+      if (this.tableDefinition.containsColumn(column)) {
         cleanColumns.add(column);
       }
     }
@@ -238,7 +238,7 @@ public class Repository<T> {
   private String getUpdateColumnConditioner() {
     String customColumnConditioner = this.crudParams.getUpdateByColumn();
     if (customColumnConditioner == null) {
-      customColumnConditioner = this.tableDefinition.getId().getPostgresColumnName();
+      customColumnConditioner = this.tableDefinition.getPrimaryKeyColumn().getPostgresColumnName();
     }
     return customColumnConditioner;
   }
