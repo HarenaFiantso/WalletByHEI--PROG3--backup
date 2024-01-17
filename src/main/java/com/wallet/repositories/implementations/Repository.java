@@ -2,7 +2,7 @@ package com.wallet.repositories.implementations;
 
 import com.wallet.annotations.DatabaseField;
 import com.wallet.annotations.DatabaseTable;
-import com.wallet.handlers.EntityTableMapping;
+import com.wallet.handlers.EntityTableMapper;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Repository<T> {
 
-  private EntityTableMapping<T> tableDefinition;
+  private EntityTableMapper<T> tableDefinition;
 
   private String tableName;
   private String schema;
@@ -134,7 +134,7 @@ public class Repository<T> {
     Field privateField = value.getClass().getDeclaredField(fieldName);
     DatabaseField fieldColumn = privateField.getAnnotation(DatabaseField.class);
     if (fieldColumn.references()) {
-      EntityTableMapping<?> getReferenceTable = new EntityTableMapping<>(returnedValue.getClass());
+      EntityTableMapper<?> getReferenceTable = new EntityTableMapper<>(returnedValue.getClass());
       String fieldRefName = getReferenceTable.getId().getJavaColumnName();
       return getMethodGetterValue(returnedValue, fieldRefName);
     }
@@ -172,7 +172,7 @@ public class Repository<T> {
       return;
     }
     Class<?> returnedClassType = field.getType();
-    EntityTableMapping<?> tableDefinition = new EntityTableMapping<>(returnedClassType);
+    EntityTableMapper<?> tableDefinition = new EntityTableMapper<>(returnedClassType);
     Object refInstance = returnedClassType.getDeclaredConstructor().newInstance();
     String javaFieldName = tableDefinition.getId().getJavaColumnName();
     String setterMethod = fieldNameToMethodSetter(javaFieldName);
@@ -189,7 +189,7 @@ public class Repository<T> {
       return STR."get\{Character.toUpperCase(name.charAt(0))}\{name.substring(1)}";
     }
 
-    EntityTableMapping<?> tableDefinition = new EntityTableMapping<>(type);
+    EntityTableMapper<?> tableDefinition = new EntityTableMapper<>(type);
     Class<?> idType = tableDefinition.getId().getJavaType().getClass();
     String idTypeName = idType.getSimpleName();
     return STR."get\{Character.toUpperCase(idTypeName.charAt(0))}\{idTypeName.substring(1)}";
@@ -227,7 +227,7 @@ public class Repository<T> {
     Class<?> capture = params.getEntityClass();
     Class<T> classy = (Class<T>) capture;
     try {
-      this.tableDefinition = new EntityTableMapping<>(classy);
+      this.tableDefinition = new EntityTableMapper<>(classy);
       this.tableName = tableDefinition.getName();
       this.schema = tableDefinition.getSchema();
     } catch (Exception e) {
