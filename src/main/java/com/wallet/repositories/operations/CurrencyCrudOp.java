@@ -11,8 +11,7 @@ public class CurrencyCrudOp extends CrudOperationsImpl<Currency> {
 
   public CurrencyCrudOp() {
     super(
-        CrudOperationsParams
-            .builder()
+        CrudOperationsParams.builder()
             .entityClass(Currency.class)
             .createColumnSet(new String[] {CURRENCY_NAME, CURRENCY_CODE})
             .updateByColumn(CURRENCY_ID)

@@ -1,12 +1,17 @@
 package com.wallet.mappers;
 
-import lombok.*;
 import com.wallet.annotations.DatabaseField;
-import com.wallet.annotations.FieldType;
 import com.wallet.annotations.DatabaseTable;
+import com.wallet.annotations.FieldType;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Maps an entity class to its corresponding database table representation.
@@ -20,24 +25,19 @@ import java.util.*;
 public class EntityTableMapper<T> {
 
   @Getter
-  private String name;
-  @Getter
-  private String schema = "public";
-  @Getter
-  private EntityColumnMapper primaryKeyColumn;
+  private final String schema = "public";
   @Getter
   private final List<EntityColumnMapper> otherColumns = new ArrayList<>();
   @Getter
   private final Class<T> entityClass;
-
-  /**
-   * -- GETTER --
-   *  Returns a list of column names for the mapped table.
-   *
-   */
   @Getter
   private final List<String> columnNames = new ArrayList<>();
   private final HashMap<String, String> columnMapping = new HashMap<>();
+
+  @Getter
+  private String name;
+  @Getter
+  private EntityColumnMapper primaryKeyColumn;
 
   /**
    * Constructs an EntityTableMapper for the given entity class.
@@ -46,58 +46,34 @@ public class EntityTableMapper<T> {
    */
   public EntityTableMapper(Class<T> entityClass) throws Exception {
     this.entityClass = entityClass;
+    initializeTableMapping();
+  }
 
+  private void initializeTableMapping() throws Exception {
     DatabaseTable tableAnnotation = entityClass.getAnnotation(DatabaseTable.class);
     if (tableAnnotation == null) {
       throw new Exception(STR."The class \{entityClass.getSimpleName()} in package \{entityClass.getPackage()} is not annotated as an entity.");
     }
 
-    defineTableMapping(entityClass, tableAnnotation);
-    if (primaryKeyColumn.isEmpty()) {
+    parseSchema(tableAnnotation);
+    parseTableName(tableAnnotation);
+    processFields(entityClass.getDeclaredFields());
+
+    if (primaryKeyColumn == null) {
       throw new Exception("The table must have an ID column (primary key).");
     }
-  }
-
-  /**
-   * Checks if the given PostgresSQL column name is mapped to a Java field.
-   *
-   * @param columnName the name of the PostgresSQL column
-   * @return true if the column is mapped, false otherwise
-   */
-  public boolean containsColumn(String columnName) {
-    return columnMapping.containsKey(columnName);
-  }
-
-  /**
-   * Retrieves the Java field name corresponding to the given PostgreSQL column name.
-   *
-   * @param columnName the name of the PostgresSQL column
-   * @return the Java field name, or null if not mapped
-   */
-  public String getJavaFieldFromPsqlColumn(String columnName) {
-    return columnMapping.get(columnName);
-  }
-
-  private void defineTableMapping(Class<T> entityClass, DatabaseTable tableAnnotation) {
-    parseSchema(tableAnnotation);
-    parseTableName(entityClass, tableAnnotation);
-    processFields(entityClass.getDeclaredFields());
   }
 
   private void parseSchema(DatabaseTable tableAnnotation) {
     String schema = tableAnnotation.schema();
     if (!Objects.equals(schema, "public")) {
-      this.schema = schema;
+      this.name = schema;
     }
   }
 
-  private void parseTableName(Class<T> entityClass, DatabaseTable tableAnnotation) {
+  private void parseTableName(DatabaseTable tableAnnotation) {
     String customTableName = tableAnnotation.name().toLowerCase().trim();
-    if (!customTableName.isEmpty()) {
-      this.name = customTableName;
-    } else {
-      this.name = entityClass.getSimpleName().toLowerCase();
-    }
+    this.name = customTableName.isEmpty() ? entityClass.getSimpleName().toLowerCase() : customTableName;
   }
 
   private void processFields(Field[] fields) {
@@ -123,6 +99,7 @@ public class EntityTableMapper<T> {
     definition.setColumnAnnotation(columnAnnotation);
     definition.setJavaType(field.getType().getSimpleName());
     definition.setPostgresType(parsePsqlType(field, columnAnnotation));
+
     if (columnAnnotation.identity() && this.primaryKeyColumn == null) {
       this.primaryKeyColumn = definition;
     } else {
@@ -132,23 +109,11 @@ public class EntityTableMapper<T> {
 
   private String parseColumnName(Field field, DatabaseField column) {
     String customColumnName = column.name().trim();
-    if (!customColumnName.isEmpty()) {
-      return customColumnName;
-    }
-    return field.getName().toLowerCase();
+    return customColumnName.isEmpty() ? field.getName().toLowerCase() : customColumnName;
   }
 
   private String parsePsqlType(Field field, DatabaseField column) {
-    String type;
-
     String definedOnAnnotation = column.fieldType();
-    if (!definedOnAnnotation.equals(FieldType.NONE)) {
-      type = definedOnAnnotation;
-    } else {
-      String javaReturnType = field.getType().getSimpleName();
-      type = JavaToDatabaseTypeMapper.get(javaReturnType);
-    }
-
-    return type;
+    return !definedOnAnnotation.equals(FieldType.NONE) ? definedOnAnnotation : JavaToDatabaseTypeMapper.get(field.getType().getSimpleName());
   }
 }
