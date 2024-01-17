@@ -17,9 +17,9 @@ public class TableDefinition<T> {
   @Getter
   private String schema = "public";
   @Getter
-  private ColumnDefinition id;
+  private EntityColumnMapping id;
   @Getter
-  private final List<ColumnDefinition> otherColumns = new ArrayList<>();
+  private final List<EntityColumnMapping> otherColumns = new ArrayList<>();
   @Getter
   private final Class<T> clazz;
 
@@ -85,7 +85,7 @@ public class TableDefinition<T> {
   }
 
   private void defineColumn(Field field, DatabaseField columnAnnotation) {
-    ColumnDefinition definition = new ColumnDefinition();
+    EntityColumnMapping definition = new EntityColumnMapping();
     String javaCol = field.getName();
     definition.setJavaColumnName(javaCol);
 

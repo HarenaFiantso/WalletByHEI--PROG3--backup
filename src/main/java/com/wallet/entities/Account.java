@@ -8,6 +8,7 @@ import com.wallet.types.GenerativeValue;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
  * @see DatabaseField: Used to specify the database field associated with the current table
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @DatabaseTable(name = "account")
